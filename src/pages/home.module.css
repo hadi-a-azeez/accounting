@@ -1,0 +1,21 @@
+body {
+  margin: 0;
+}
+.container {
+  display: flex;
+  min-height: 100vh;
+  min-width: 100vw;
+}
+.sideContainer {
+  width: 90px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(209, 211, 212);
+  min-height: 100vh;
+}
+.icon {
+  width: 28px;
+  height: 28px;
+}
