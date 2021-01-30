@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import styles from "./customers.module.css";
 import SideBar from "../components/sideBar";
@@ -29,6 +30,9 @@ import {
 import { EditIcon } from "@chakra-ui/icons";
 
 const Customers = () => {
+  const { addCustomer, handleSubmit } = useForm();
+  const onSubmit = (data) => alert(JSON.stringify(data));
+
   const [isOpen, setIsOpen] = useState(false);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const history = useHistory();
@@ -43,7 +47,7 @@ const Customers = () => {
         onClick={() => setIsOpen(true)}
         mt="70px"
         alignSelf="flex-start"
-        ml="140px" ////////////
+        ml="140px"
       >
         Add New Customer
       </Button>
@@ -53,34 +57,48 @@ const Customers = () => {
         <ModalContent>
           <ModalHeader>Add New Customer</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <FormControl>
-              <FormLabel>Customer Name</FormLabel>
-              <Input
-                size="lg"
-                variant="filled"
-                w="100%"
-                placeholder="customer name"
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Phone Number</FormLabel>
-              <Input
-                size="lg"
-                variant="filled"
-                w="100%"
-                placeholder="phone no"
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Charge</FormLabel>
-              <Input size="lg" variant="filled" w="100%" placeholder="charge" />
-            </FormControl>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue">Add Customer</Button>
-          </ModalFooter>
+          <form>
+            <ModalBody>
+              <FormControl>
+                <FormLabel>Customer Name</FormLabel>
+                <Input
+                  name="customer_name"
+                  ref={addCustomer}
+                  size="lg"
+                  variant="filled"
+                  w="100%"
+                  placeholder="customer name"
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Phone Number</FormLabel>
+                <Input
+                  name="customer_phone"
+                  ref={addCustomer}
+                  size="lg"
+                  variant="filled"
+                  w="100%"
+                  placeholder="phone no"
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Charge</FormLabel>
+                <Input
+                  name="customer_charge"
+                  ref={addCustomer}
+                  size="lg"
+                  variant="filled"
+                  w="100%"
+                  placeholder="charge"
+                />
+              </FormControl>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" onClick={handleSubmit(onSubmit)}>
+                Add Customer
+              </Button>
+            </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
       {/* Add new customer modal ends here */}
@@ -94,6 +112,7 @@ const Customers = () => {
             <FormControl>
               <FormLabel>Customer Name</FormLabel>
               <Input
+                name="customer_name"
                 size="lg"
                 variant="filled"
                 w="100%"
@@ -103,6 +122,7 @@ const Customers = () => {
             <FormControl>
               <FormLabel>Phone Number</FormLabel>
               <Input
+                name="customer_phone"
                 size="lg"
                 variant="filled"
                 w="100%"
@@ -111,7 +131,13 @@ const Customers = () => {
             </FormControl>
             <FormControl>
               <FormLabel>Charge</FormLabel>
-              <Input size="lg" variant="filled" w="100%" placeholder="charge" />
+              <Input
+                name="customer_charge"
+                size="lg"
+                variant="filled"
+                w="100%"
+                placeholder="charge"
+              />
             </FormControl>
           </ModalBody>
 

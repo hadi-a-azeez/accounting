@@ -4,6 +4,7 @@ import Customers from "./pages/customers";
 import Entry from "./pages/entry";
 import Home from "./pages/home";
 import Reports from "./pages/reports";
+import FormSample from "./pages/formsample";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route exact path="/customers" component={Customers} />
         <Route exact path="/customer_history" component={CustomerHistory} />
         <Route exact path="/reports" component={Reports} />
+        <Route exact path="/test" component={FormSample} />
       </Switch>
     </Router>
   );
