@@ -30,7 +30,7 @@ import {
 import { EditIcon } from "@chakra-ui/icons";
 
 const Customers = () => {
-  const { addCustomer, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm();
   const onSubmit = (data) => alert(JSON.stringify(data));
 
   const [isOpen, setIsOpen] = useState(false);
@@ -63,7 +63,7 @@ const Customers = () => {
                 <FormLabel>Customer Name</FormLabel>
                 <Input
                   name="customer_name"
-                  ref={addCustomer}
+                  ref={register}
                   size="lg"
                   variant="filled"
                   w="100%"
@@ -73,8 +73,11 @@ const Customers = () => {
               <FormControl>
                 <FormLabel>Phone Number</FormLabel>
                 <Input
+                  type="number"
                   name="customer_phone"
-                  ref={addCustomer}
+                  ref={register({
+                    valueAsNumber: true,
+                  })}
                   size="lg"
                   variant="filled"
                   w="100%"
@@ -84,8 +87,11 @@ const Customers = () => {
               <FormControl>
                 <FormLabel>Charge</FormLabel>
                 <Input
+                  type="number"
                   name="customer_charge"
-                  ref={addCustomer}
+                  ref={register({
+                    valueAsNumber: true,
+                  })}
                   size="lg"
                   variant="filled"
                   w="100%"
@@ -102,6 +108,7 @@ const Customers = () => {
         </ModalContent>
       </Modal>
       {/* Add new customer modal ends here */}
+
       {/* Update customer modal starts here */}
       <Modal isOpen={isUpdateOpen} onClose={() => setIsUpdateOpen(false)}>
         <ModalOverlay />
