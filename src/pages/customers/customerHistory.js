@@ -16,7 +16,7 @@ import {
   Stat,
   IconButton,
 } from "@chakra-ui/react";
-import styles from "./customerHistory.module.css";
+import styles from "./css/customerHistory.module.css";
 import SideBar from "../../components/sideBar";
 import UpdateCustomer from "../../components/updateCustomer";
 

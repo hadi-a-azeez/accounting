@@ -1,8 +1,8 @@
-import styles from "./entry.module.css";
+import styles from "./css/entry.module.css";
 import { useState } from "react";
-import SideBar from "../components/sideBar";
-import TopBar from "../components/topBar";
-import AddCustomer from "../components/addCustomer";
+import SideBar from "../../components/sideBar";
+import TopBar from "../../components/topBar";
+import AddCustomer from "../../components/addCustomer";
 import {
   Select,
   Box,
@@ -12,6 +12,7 @@ import {
   Flex,
   Button,
 } from "@chakra-ui/react";
+import { CashReciept } from "./cashReciept";
 
 const Entry = () => {
   const [mode, setMode] = useState("1");
@@ -39,9 +40,10 @@ const Entry = () => {
               size="lg"
               onChange={(e) => setMode(e.target.value)}
             >
-              <option value="1">Purchase</option>
-              <option value="2">Money</option>
-              <option value="3">Payment</option>
+              <option value="purchase">Purchase</option>
+              <option value="sale">Sale</option>
+              <option value="payment">Payment</option>
+              <option value="cash">Cash Reciept</option>
             </Select>
           </FormControl>
           <FormControl w="25%" ml="3">
@@ -60,22 +62,7 @@ const Entry = () => {
             {isModalVisible && <AddCustomer />}
           </FormControl>
         </Flex>
-        {mode === "1" && (
-          <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
-            <FormControl w="25%">
-              <FormLabel>Quantity</FormLabel>
-              <Input variant="filled" w="100%" size="lg" />
-            </FormControl>
-            <FormControl w="25%" ml="3">
-              <FormLabel>Charge</FormLabel>
-              <Input variant="filled" w="100%" size="lg" />
-            </FormControl>
-            <FormControl w="25%" ml="3">
-              <FormLabel>Sale Payment</FormLabel>
-              <Input variant="filled" w="100%" size="lg" />
-            </FormControl>
-          </Flex>
-        )}
+        {mode === "cash" && <CashReciept />}
         {/* AED OR SR */}
         {mode === "2" && (
           <>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
-import styles from "./customers.module.css";
+import styles from "./css/customers.module.css";
 import SideBar from "../../components/sideBar";
 import TopBar from "../../components/topBar";
 import {

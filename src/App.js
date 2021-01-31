@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import CustomerHistory from "./pages/customers/customerHistory";
-import Customers from "./pages/customers/customers_list";
-import Entry from "./pages/entry";
+import Customers from "./pages/customers/customersList";
+import Entry from "./pages/entry/entry";
 import Home from "./pages/home";
 import Reports from "./pages/reports";
 
