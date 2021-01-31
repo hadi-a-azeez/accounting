@@ -35,44 +35,50 @@ export const Purchase = () => {
   };
   const handleAddPurchase = async () => {
     console.log(purchaseData);
-    await addPurchaseAPI(purchaseData);
+    const response = await addPurchaseAPI(purchaseData);
+    console.log(response);
   };
 
   return (
     <>
-      <FormControl w="25%" ml="15%" alignSelf="flex-start">
-        <FormLabel>Currency</FormLabel>
-        <Select
-          variant="filled"
-          size="lg"
-          onChange={(e) =>
-            setPurchaseData({ ...purchaseData, currency_type: e.target.value })
-          }
-        >
-          <option value="SR">SR</option>
-          <option value="AED">AED</option>
-          <option value="INR">INR</option>
-        </Select>
-      </FormControl>
-      <FormControl w="25%" ml="15%" mt="3" alignSelf="flex-start">
-        <FormLabel>Date</FormLabel>
-        <DatePicker
-          format="dd/MM/yyyy"
-          value={purchaseData.date}
-          onChange={(date) => {
-            setPurchaseData({ ...purchaseData, date });
-          }}
-        />
-      </FormControl>
-      <FormControl w="25%" ml="15%" alignSelf="flex-start">
-        <FormLabel>Customer</FormLabel>
-        <AsyncSelect
-          loadOptions={searchCustomers}
-          onChange={(input) =>
-            setPurchaseData({ ...purchaseData, customer_id: input.value })
-          }
-        />
-      </FormControl>
+      <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
+        <FormControl w="25%">
+          <FormLabel>Currency</FormLabel>
+          <Select
+            variant="filled"
+            size="lg"
+            onChange={(e) =>
+              setPurchaseData({
+                ...purchaseData,
+                currency_type: e.target.value,
+              })
+            }
+          >
+            <option value="SR">SR</option>
+            <option value="AED">AED</option>
+            <option value="INR">INR</option>
+          </Select>
+        </FormControl>
+        <FormControl w="25%" ml="3">
+          <FormLabel>Date</FormLabel>
+          <DatePicker
+            format="dd/MM/yyyy"
+            value={purchaseData.date}
+            onChange={(date) => {
+              setPurchaseData({ ...purchaseData, date });
+            }}
+          />
+        </FormControl>
+        <FormControl w="25%" ml="3">
+          <FormLabel>Customer</FormLabel>
+          <AsyncSelect
+            loadOptions={searchCustomers}
+            onChange={(input) =>
+              setPurchaseData({ ...purchaseData, customer_id: input.value })
+            }
+          />
+        </FormControl>
+      </Flex>
 
       <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
         <FormControl w="25%">

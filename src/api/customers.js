@@ -20,3 +20,9 @@ export const searchCustomersAPI = async (searchTerm) => {
     return await axios.get(`${apiRoot}/customer/search/${searchTerm}`);
   } catch (error) {}
 };
+
+export const getCustomerByIdAPI = async (id) => {
+  try {
+    return await axios.get(`${apiRoot}/customer/${id}`);
+  } catch (error) {}
+};

@@ -56,7 +56,9 @@ const Customers = () => {
     return (
       <Tr>
         <Td>
-          <Link onClick={() => history.push("/customer_history")}>
+          <Link
+            onClick={() => history.push(`/customer_history/${customer.id}`)}
+          >
             {customer.customer_name}
           </Link>
         </Td>

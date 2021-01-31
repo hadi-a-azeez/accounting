@@ -6,3 +6,10 @@ export const addPurchaseAPI = async (purchase) => {
     return await axios.post(`${apiRoot}/purchase`, purchase);
   } catch (error) {}
 };
+
+//get purchase history of a user
+export const getPurchaseHistoryAPI = async (customer_id) => {
+  try {
+    return await axios.get(`${apiRoot}/purchase/${customer_id}`);
+  } catch (error) {}
+};
