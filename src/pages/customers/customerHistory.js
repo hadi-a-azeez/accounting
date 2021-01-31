@@ -1,5 +1,5 @@
 import { useState } from "react";
-import TopBar from "../components/topBar";
+import TopBar from "../../components/topBar";
 import {
   Button,
   Table,
@@ -17,8 +17,8 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import styles from "./customerHistory.module.css";
-import SideBar from "../components/sideBar";
-import UpdateCustomer from "../components/updateCustomer";
+import SideBar from "../../components/sideBar";
+import UpdateCustomer from "../../components/updateCustomer";
 
 const CustomerHistory = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);

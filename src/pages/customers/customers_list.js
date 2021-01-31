@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import styles from "./customers.module.css";
-import SideBar from "../components/sideBar";
-import TopBar from "../components/topBar";
+import SideBar from "../../components/sideBar";
+import TopBar from "../../components/topBar";
 import {
   Button,
   Modal,
@@ -28,14 +28,48 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
+import { addCustomerAPI, getCustomerAPI } from "../../api/customers";
 
 const Customers = () => {
+  const [customersData, setCustomersData] = useState([]);
+
+  useEffect(() => {
+    const getCustomers = async () => {
+      const response = await getCustomerAPI();
+      console.log(response.data);
+      setCustomersData(response.data);
+    };
+    getCustomers();
+  }, []);
+
   const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => alert(JSON.stringify(data));
+  const addCustomer = async (customer) => {
+    const response = await addCustomerAPI(customer);
+    console.log(response);
+  };
 
   const [isOpen, setIsOpen] = useState(false);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const history = useHistory();
+
+  const CustomerCard = ({ customer }) => {
+    return (
+      <Tr>
+        <Td>
+          <Link onClick={() => history.push("/customer_history")}>i</Link>
+        </Td>
+        <Td>gg</Td>
+        <Td>hh</Td>
+        <Td>
+          <IconButton
+            borderRadius="30px"
+            icon={<EditIcon />}
+            onClick={() => setIsUpdateOpen(true)}
+          />
+        </Td>
+      </Tr>
+    );
+  };
 
   return (
     <div className={styles.container}>
@@ -100,7 +134,7 @@ const Customers = () => {
               </FormControl>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" onClick={handleSubmit(onSubmit)}>
+              <Button colorScheme="blue" onClick={handleSubmit(addCustomer)}>
                 Add Customer
               </Button>
             </ModalFooter>
@@ -169,46 +203,10 @@ const Customers = () => {
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td>
-                <Link onClick={() => history.push("/customer_history")}>
-                  Rafeeq
-                </Link>
-              </Td>
-              <Td>999878655</Td>
-              <Td>25.4</Td>
-              <Td>
-                <IconButton
-                  borderRadius="30px"
-                  icon={<EditIcon />}
-                  onClick={() => setIsUpdateOpen(true)}
-                />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>Ambu</Td>
-              <Td>999878655</Td>
-              <Td>25.4</Td>
-              <Td>
-                <IconButton
-                  borderRadius="30px"
-                  icon={<EditIcon />}
-                  onClick={() => setIsUpdateOpen(true)}
-                />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>Shafi</Td>
-              <Td>999878655</Td>
-              <Td>25.4</Td>
-              <Td>
-                <IconButton
-                  borderRadius="30px"
-                  icon={<EditIcon />}
-                  onClick={() => setIsUpdateOpen(true)}
-                />
-              </Td>
-            </Tr>
+            {customersData &&
+              customersData.map((customer, i) => {
+                <CustomerCard customer={customer} key={i} />;
+              })}
           </Tbody>
           <Tfoot>
             <Tr>
