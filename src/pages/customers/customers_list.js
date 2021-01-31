@@ -56,10 +56,12 @@ const Customers = () => {
     return (
       <Tr>
         <Td>
-          <Link onClick={() => history.push("/customer_history")}>i</Link>
+          <Link onClick={() => history.push("/customer_history")}>
+            {customer.customer_name}
+          </Link>
         </Td>
-        <Td>gg</Td>
-        <Td>hh</Td>
+        <Td>{customer.customer_phone}</Td>
+        <Td>{customer.customer_charge}</Td>
         <Td>
           <IconButton
             borderRadius="30px"
