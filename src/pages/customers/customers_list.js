@@ -206,9 +206,9 @@ const Customers = () => {
           </Thead>
           <Tbody>
             {customersData &&
-              customersData.map((customer, i) => {
-                <CustomerCard customer={customer} key={i} />;
-              })}
+              customersData.map((customer, i) => (
+                <CustomerCard customer={customer} key={i} />
+              ))}
           </Tbody>
           <Tfoot>
             <Tr>
