@@ -14,3 +14,9 @@ export const getCustomerAPI = async () => {
     console.log(error);
   }
 };
+
+export const searchCustomersAPI = async (searchTerm) => {
+  try {
+    return await axios.get(`${apiRoot}/customer/search/${searchTerm}`);
+  } catch (error) {}
+};

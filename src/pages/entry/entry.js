@@ -2,7 +2,7 @@ import styles from "./css/entry.module.css";
 import { useState } from "react";
 import SideBar from "../../components/sideBar";
 import TopBar from "../../components/topBar";
-import AddCustomer from "../../components/addCustomer";
+
 import {
   Select,
   Box,
@@ -13,9 +13,12 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { CashReciept } from "./cashReciept";
+import { Payment } from "./payment";
+import { Purchase } from "./purchase";
+import { Sale } from "./sale";
 
 const Entry = () => {
-  const [mode, setMode] = useState("1");
+  const [mode, setMode] = useState("purchase");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   return (
@@ -29,10 +32,17 @@ const Entry = () => {
         flexDirection="column"
         alignItems="center"
         w="70%"
-        h="400px"
         shadow="lg"
+        paddingBottom="10"
       >
-        <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
+        <Flex
+          dir="row"
+          w="90%"
+          mt="3"
+          d="flex"
+          justifyContent="flex-start"
+          w="70%"
+        >
           <FormControl w="25%">
             <FormLabel>Mode</FormLabel>
             <Select
@@ -46,61 +56,11 @@ const Entry = () => {
               <option value="cash">Cash Reciept</option>
             </Select>
           </FormControl>
-          <FormControl w="25%" ml="3">
-            <FormLabel>Customer</FormLabel>
-            <Input variant="filled" w="100%" size="lg" />
-          </FormControl>
-          <FormControl w="25%" ml="3">
-            <FormLabel>Or</FormLabel>
-            <Button
-              colorScheme="blue"
-              size="lg"
-              onClick={() => setIsModalVisible(!isModalVisible)}
-            >
-              Add New Customer
-            </Button>
-            {isModalVisible && <AddCustomer />}
-          </FormControl>
         </Flex>
+        {mode === "purchase" && <Purchase />}
+        {mode === "sale" && <Sale />}
+        {mode === "payment" && <Payment />}
         {mode === "cash" && <CashReciept />}
-        {/* AED OR SR */}
-        {mode === "2" && (
-          <>
-            <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
-              <FormControl w="25%">
-                <FormLabel>AED OR SR</FormLabel>
-                <Select variant="filled" size="lg">
-                  <option value="1">AED</option>
-                  <option value="2">SR</option>
-                </Select>
-              </FormControl>
-              <FormControl w="25%" ml="3">
-                <FormLabel>Amount</FormLabel>
-                <Input variant="filled" w="100%" size="lg" />
-              </FormControl>
-              <FormControl w="25%" ml="3">
-                <FormLabel>Conversion Rate</FormLabel>
-                <Input variant="filled" w="100%" size="lg" />
-              </FormControl>
-            </Flex>
-            <FormControl w="25%" mt="3">
-              <FormLabel>Final Amount</FormLabel>
-              <Input variant="filled" w="100%" size="lg" />
-            </FormControl>
-          </>
-        )}
-        {/* Payment */}
-        {mode === "3" && (
-          <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
-            <FormControl w="25%">
-              <FormLabel>Amount</FormLabel>
-              <Input variant="filled" w="100%" size="lg" />
-            </FormControl>
-          </Flex>
-        )}
-        <Button colorScheme="blue" size="lg" mt="4">
-          Add Entry
-        </Button>
       </Box>
     </div>
   );
