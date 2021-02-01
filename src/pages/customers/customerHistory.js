@@ -13,19 +13,23 @@ import {
   Text,
   Stack,
   Flex,
-  Stat,
-  IconButton,
 } from "@chakra-ui/react";
 import styles from "./css/customerHistory.module.css";
 import SideBar from "../../components/sideBar";
 import UpdateCustomer from "../../components/updateCustomer";
 import { getCustomerByIdAPI } from "../../api/customers";
 import { getPurchaseHistoryAPI } from "../../api/purchase";
+import { getSaleHistoryAPI } from "../../api/sale";
+import { getCashReceiptHistoryAPI } from "../../api/cashReciept";
+import { getPaymentHistoryAPI } from "../../api/payment";
 
 const CustomerHistory = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [customerDetails, setCustomerDetails] = useState({});
   const [purchaseHistory, setPurchaseHistory] = useState([]);
+  const [saleHistory, setSaleHistory] = useState([]);
+  const [cashReceiptHistory, setCashReceiptHistory] = useState([]);
+  const [paymentHistory, setPaymentHistory] = useState([]);
   const id = props.match.params.id;
 
   useEffect(() => {
@@ -38,9 +42,23 @@ const CustomerHistory = (props) => {
       const purchseData = await getPurchaseHistoryAPI(id);
       setPurchaseHistory(purchseData.data);
     };
+    const getSaleHistory = async () => {
+      const saleData = await getSaleHistoryAPI(id);
+      setSaleHistory(saleData.data);
+    };
+    const getCashReceiptHistory = async () => {
+      const cashReceiptData = await getCashReceiptHistoryAPI(id);
+      setCashReceiptHistory(cashReceiptData.data);
+    };
+    const getPaymentHistory = async () => {
+      const paymentData = await getPaymentHistoryAPI(id);
+      setPaymentHistory(paymentData.data);
+    };
     getCustomerData();
     getPurchaseHistory();
-    console.log(purchaseHistory);
+    getSaleHistory();
+    getCashReceiptHistory();
+    getPaymentHistory();
   }, []);
 
   return (
@@ -156,34 +174,78 @@ const CustomerHistory = (props) => {
           <Thead>
             <Tr>
               <Th>Mode</Th>
-              <Th>AED or SR</Th>
+              <Th>Date</Th>
+              <Th>Currency type</Th>
               <Th>Amount</Th>
-              <Th>Conversion Rate</Th>
-              <Th>Final Amount</Th>
+              <Th>Charge</Th>
+              <Th>Total</Th>
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td>Money</Td>
-              <Td>SR</Td>
-              <Td>25.4</Td>
-              <Td>25.4</Td>
-              <Td>25.4</Td>
-            </Tr>
+            {saleHistory.length > 0 &&
+              saleHistory.map((sale) => (
+                <Tr>
+                  <Td>Sale</Td>
+                  <Td>{sale.date}</Td>
+                  <Td>{sale.currency_type}</Td>
+                  <Td>{sale.currency_price}</Td>
+                  <Td>{sale.currency_charge}</Td>
+                  <Td>{sale.currency_charge * sale.currency_price}</Td>
+                </Tr>
+              ))}
           </Tbody>
           <Tfoot>
             <Tr>
               <Th>Mode</Th>
-              <Th>AED or SR</Th>
+              <Th>Date</Th>
+              <Th>Currency type</Th>
               <Th>Amount</Th>
-              <Th>Conversion Rate</Th>
-              <Th>Final Amount</Th>
+              <Th>Charge</Th>
+              <Th>Total</Th>
             </Tr>
           </Tfoot>
         </Table>
       </Box>
-      {/* Money table ends here */}
-      {/* Payment table starts here */}
+      {/* sa;e table ends here */}
+      {/* cash receipt table starts here */}
+      <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
+        Cash receipt
+      </Text>
+      <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              <Th>Mode</Th>
+              <Th>Date</Th>
+              <Th>Currency type</Th>
+              <Th>Amount</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {cashReceiptHistory.length > 0 &&
+              cashReceiptHistory.map((cashReceipt) => (
+                <Tr>
+                  <Td>Sale</Td>
+                  <Td>{cashReceipt.date}</Td>
+                  <Td>{cashReceipt.currency_type}</Td>
+                  <Td>{cashReceipt.currency_quantity}</Td>
+                </Tr>
+              ))}
+          </Tbody>
+          <Tfoot>
+            <Tr>
+              <Th>Mode</Th>
+              <Th>Date</Th>
+              <Th>Currency type</Th>
+              <Th>Amount</Th>
+              <Th>Charge</Th>
+              <Th>Total</Th>
+            </Tr>
+          </Tfoot>
+        </Table>
+      </Box>
+      {/* cash receipt table ends here */}
+      {/* payment table starts here */}
       <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
         Payment
       </Text>
@@ -192,32 +254,35 @@ const CustomerHistory = (props) => {
           <Thead>
             <Tr>
               <Th>Mode</Th>
+              <Th>Date</Th>
+              <Th>Currency type</Th>
               <Th>Amount</Th>
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td>Payment</Td>
-              <Td>25.4</Td>
-            </Tr>
-            <Tr>
-              <Td>Payment</Td>
-              <Td>30.48</Td>
-            </Tr>
-            <Tr>
-              <Td>Payment</Td>
-              <Td>0.91444</Td>
-            </Tr>
+            {paymentHistory.length > 0 &&
+              paymentHistory.map((payment) => (
+                <Tr>
+                  <Td>Payment</Td>
+                  <Td>{payment.date}</Td>
+                  <Td>{payment.currency_type}</Td>
+                  <Td>{payment.currency_quantity}</Td>
+                </Tr>
+              ))}
           </Tbody>
           <Tfoot>
             <Tr>
               <Th>Mode</Th>
+              <Th>Date</Th>
+              <Th>Currency type</Th>
               <Th>Amount</Th>
+              <Th>Charge</Th>
+              <Th>Total</Th>
             </Tr>
           </Tfoot>
         </Table>
       </Box>
-      {/* Payment table ends here */}
+      {/* payment table ends here */}
     </div>
   );
 };
