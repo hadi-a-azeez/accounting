@@ -238,8 +238,6 @@ const CustomerHistory = (props) => {
               <Th>Date</Th>
               <Th>Currency type</Th>
               <Th>Amount</Th>
-              <Th>Charge</Th>
-              <Th>Total</Th>
             </Tr>
           </Tfoot>
         </Table>
@@ -249,7 +247,7 @@ const CustomerHistory = (props) => {
       <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
         Payment
       </Text>
-      <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+      <Box w="80%" boxShadow="lg" mt="3" mb="6" borderRadius="8px">
         <Table variant="simple">
           <Thead>
             <Tr>
@@ -266,7 +264,7 @@ const CustomerHistory = (props) => {
                   <Td>Payment</Td>
                   <Td>{payment.date}</Td>
                   <Td>{payment.currency_type}</Td>
-                  <Td>{payment.currency_quantity}</Td>
+                  <Td>{payment.currency_price}</Td>
                 </Tr>
               ))}
           </Tbody>
@@ -276,8 +274,6 @@ const CustomerHistory = (props) => {
               <Th>Date</Th>
               <Th>Currency type</Th>
               <Th>Amount</Th>
-              <Th>Charge</Th>
-              <Th>Total</Th>
             </Tr>
           </Tfoot>
         </Table>
