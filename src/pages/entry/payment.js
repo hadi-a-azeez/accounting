@@ -78,13 +78,9 @@ export const Payment = () => {
         </FormControl>
       </Flex>
 
-<<<<<<< HEAD
       <Flex dir="row" w="70%" mt="3" d="flex" justifyContent="flex-start">
-=======
-      <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
->>>>>>> f762bd6be5a9364523064e57806b206efdc6702d
         <FormControl w="25%">
-          <FormLabel>Amount</FormLabel>
+          <FormLabel>Amount:</FormLabel>
           <Input
             type="number"
             variant="filled"
