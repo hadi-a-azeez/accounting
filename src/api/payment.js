@@ -6,6 +6,7 @@ export const addPaymentAPI = async (payment) => {
     return await axios.post(`${apiRoot}/payment`, payment);
   } catch (error) {}
 };
+<<<<<<< HEAD
 
 //get payment history of a user
 export const getPaymentHistoryAPI = async (customer_id) => {
@@ -13,3 +14,5 @@ export const getPaymentHistoryAPI = async (customer_id) => {
     return await axios.get(`${apiRoot}/payment/${customer_id}`);
   } catch (error) {}
 };
+=======
+>>>>>>> f762bd6be5a9364523064e57806b206efdc6702d
