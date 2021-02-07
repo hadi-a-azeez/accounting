@@ -1,11 +1,11 @@
 import {
   Select,
-  Box,
   FormControl,
   FormLabel,
   Input,
   Flex,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { searchCustomersAPI } from "../../api/customers";
@@ -23,6 +23,7 @@ export const Sale = () => {
     date: new Date(),
   });
   const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
   const searchCustomers = async (searchTerm, callBack) => {
     const customerResponse = await searchCustomersAPI(searchTerm);
@@ -43,6 +44,13 @@ export const Sale = () => {
     console.log(response);
     if (response.status === 200) {
       setIsLoading(false);
+      toast({
+        title: "Sale Added",
+        description: "Sale added successfully",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
     }
   };
 

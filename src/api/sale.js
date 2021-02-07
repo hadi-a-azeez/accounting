@@ -13,3 +13,9 @@ export const getSaleHistoryAPI = async (customer_id) => {
     return await axios.get(`${apiRoot}/sale/${customer_id}`);
   } catch (error) {}
 };
+//get all sale history
+export const getAllSaleHistoryAPI = async () => {
+  try {
+    return await axios.get(`${apiRoot}/sale`);
+  } catch (error) {}
+};

@@ -13,3 +13,10 @@ export const getCashReceiptHistoryAPI = async (customer_id) => {
     return await axios.get(`${apiRoot}/cash_receipt/${customer_id}`);
   } catch (error) {}
 };
+
+//get all cash receipt history
+export const getAllCashReceiptHistoryAPI = async () => {
+  try {
+    return await axios.get(`${apiRoot}/cash_receipt`);
+  } catch (error) {}
+};

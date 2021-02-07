@@ -34,6 +34,7 @@ import { addCustomerAPI, getCustomerAPI } from "../../api/customers";
 const Customers = () => {
   const [customersData, setCustomersData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
 
   useEffect(() => {
     const getCustomers = async () => {
@@ -48,8 +49,12 @@ const Customers = () => {
 
   const { register, handleSubmit } = useForm();
   const addCustomer = async (customer) => {
+    setIsBtnLoading(true);
     const response = await addCustomerAPI(customer);
     console.log(response);
+    if (response.status === 200) {
+      setIsBtnLoading(false);
+    }
   };
 
   const [isOpen, setIsOpen] = useState(false);
@@ -142,7 +147,12 @@ const Customers = () => {
               </FormControl>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" onClick={handleSubmit(addCustomer)}>
+              <Button
+                colorScheme="blue"
+                isLoading={isBtnLoading}
+                loadingText="Adding customer"
+                onClick={handleSubmit(addCustomer)}
+              >
                 Add Customer
               </Button>
             </ModalFooter>

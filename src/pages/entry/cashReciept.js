@@ -5,6 +5,7 @@ import {
   Input,
   Flex,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { searchCustomersAPI } from "../../api/customers";
@@ -30,6 +31,7 @@ export const CashReciept = () => {
     date: new Date(),
   });
   const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
   const searchCustomers = async (searchTerm, callBack) => {
     const customerResponse = await searchCustomersAPI(searchTerm);
@@ -54,6 +56,13 @@ export const CashReciept = () => {
     const responseExchange = await addExchangeAPI(newExchangeData);
     if (responseCashReceipt.status === 200 && responseExchange.status === 200) {
       setIsLoading(false);
+      toast({
+        title: "Cash Receipt Added.",
+        description: "cash receipt addes successfully.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
     }
   };
 

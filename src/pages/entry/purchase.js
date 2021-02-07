@@ -6,6 +6,7 @@ import {
   Input,
   Flex,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { searchCustomersAPI } from "../../api/customers";
@@ -24,6 +25,7 @@ export const Purchase = () => {
     date: new Date(),
   });
   const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
   const searchCustomers = async (searchTerm, callBack) => {
     const customerResponse = await searchCustomersAPI(searchTerm);
@@ -43,7 +45,16 @@ export const Purchase = () => {
     };
     const response = await addPurchaseAPI(newPurchase);
     console.log(response);
-    if (response.status === 200) setIsLoading(false);
+    if (response.status === 200) {
+      setIsLoading(false);
+      toast({
+        title: "Purchase Added.",
+        description: "Purchase added successfully",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
   };
 
   return (

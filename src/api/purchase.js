@@ -13,3 +13,9 @@ export const getPurchaseHistoryAPI = async (customer_id) => {
     return await axios.get(`${apiRoot}/purchase/${customer_id}`);
   } catch (error) {}
 };
+//get all purchase history
+export const getAllPurchaseHistoryAPI = async (cusomer_id) => {
+  try {
+    return await axios.get(`${apiRoot}/purchase`);
+  } catch (error) {}
+};
