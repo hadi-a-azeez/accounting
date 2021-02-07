@@ -18,11 +18,12 @@ export const Purchase = () => {
   const [purchaseData, setPurchaseData] = useState({
     currency_quantity: 0,
     currency_charge: 0,
-    currency_type: "",
+    currency_type: "SR",
     customer_id: 0,
-    total: 0,
+
     date: new Date(),
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const searchCustomers = async (searchTerm, callBack) => {
     const customerResponse = await searchCustomersAPI(searchTerm);
@@ -34,9 +35,15 @@ export const Purchase = () => {
     callBack(filteredResponse);
   };
   const handleAddPurchase = async () => {
-    console.log(purchaseData);
-    const response = await addPurchaseAPI(purchaseData);
+    setIsLoading(true);
+    const newPurchase = {
+      ...purchaseData,
+      currency_total:
+        purchaseData.currency_charge * purchaseData.currency_quantity,
+    };
+    const response = await addPurchaseAPI(newPurchase);
     console.log(response);
+    if (response.status === 200) setIsLoading(false);
   };
 
   return (
@@ -92,7 +99,7 @@ export const Purchase = () => {
             onChange={(e) =>
               setPurchaseData({
                 ...purchaseData,
-                currency_quantity: parseInt(e.target.value),
+                currency_quantity: parseFloat(e.target.value),
               })
             }
           />
@@ -108,7 +115,7 @@ export const Purchase = () => {
             onChange={(e) =>
               setPurchaseData({
                 ...purchaseData,
-                currency_charge: parseInt(e.target.value),
+                currency_charge: parseFloat(e.target.value),
               })
             }
           />
@@ -123,14 +130,18 @@ export const Purchase = () => {
             value={
               purchaseData.currency_quantity * purchaseData.currency_charge
             }
-            onChange={(e) =>
-              setPurchaseData({ ...purchaseData, total: e.target.value })
-            }
             readOnly
           />
         </FormControl>
       </Flex>
-      <Button colorScheme="blue" size="lg" mt="4" onClick={handleAddPurchase}>
+      <Button
+        colorScheme="blue"
+        size="lg"
+        mt="4"
+        onClick={handleAddPurchase}
+        isLoading={isLoading}
+        loadingText="Adding purchase"
+      >
         Add Purchase
       </Button>
     </>

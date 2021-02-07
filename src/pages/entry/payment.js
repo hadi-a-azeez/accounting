@@ -16,12 +16,12 @@ import { addPaymentAPI } from "../../api/payment";
 
 export const Payment = () => {
   const [paymentData, setPaymentData] = useState({
-    currency_price: 0,
-    purchase_id: 4,
-    currency_type: "",
+    currency_quantity: 0,
+    currency_type: "SR",
     customer_id: 0,
     date: new Date(),
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const searchCustomers = async (searchTerm, callBack) => {
     const customerResponse = await searchCustomersAPI(searchTerm);
@@ -33,8 +33,13 @@ export const Payment = () => {
     callBack(filteredResponse);
   };
   const handleAddPayment = async () => {
+    setIsLoading(true);
     console.log(paymentData);
-    await addPaymentAPI(paymentData);
+    const response = await addPaymentAPI(paymentData);
+
+    if (response.status === 200) {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -90,13 +95,20 @@ export const Payment = () => {
             onChange={(e) =>
               setPaymentData({
                 ...paymentData,
-                currency_price: parseInt(e.target.value),
+                currency_quantity: parseInt(e.target.value),
               })
             }
           />
         </FormControl>
       </Flex>
-      <Button colorScheme="blue" size="lg" mt="4" onClick={handleAddPayment}>
+      <Button
+        colorScheme="blue"
+        size="lg"
+        mt="4"
+        onClick={handleAddPayment}
+        isLoading={isLoading}
+        loadingText="Adding payment"
+      >
         Add Payment
       </Button>
     </>

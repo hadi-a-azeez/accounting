@@ -16,13 +16,13 @@ import { addSaleAPI } from "../../api/sale";
 
 export const Sale = () => {
   const [saleData, setSaleData] = useState({
-    currency_price: 0,
+    currency_quantity: 0,
     currency_charge: 0,
-    purchase_id: 4,
-    currency_type: "",
+    currency_type: "SR",
     customer_id: 0,
     date: new Date(),
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const searchCustomers = async (searchTerm, callBack) => {
     const customerResponse = await searchCustomersAPI(searchTerm);
@@ -34,9 +34,16 @@ export const Sale = () => {
     callBack(filteredResponse);
   };
   const handleAddSale = async () => {
-    console.log(saleData);
-    const response = await addSaleAPI(saleData);
+    setIsLoading(true);
+    const newSale = {
+      ...saleData,
+      currency_total: saleData.currency_charge * saleData.currency_quantity,
+    };
+    const response = await addSaleAPI(newSale);
     console.log(response);
+    if (response.status === 200) {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -92,7 +99,7 @@ export const Sale = () => {
             onChange={(e) =>
               setSaleData({
                 ...saleData,
-                currency_price: parseInt(e.target.value),
+                currency_quantity: parseFloat(e.target.value),
               })
             }
           />
@@ -108,7 +115,7 @@ export const Sale = () => {
             onChange={(e) =>
               setSaleData({
                 ...saleData,
-                currency_charge: parseInt(e.target.value),
+                currency_charge: parseFloat(e.target.value),
               })
             }
           />
@@ -120,12 +127,19 @@ export const Sale = () => {
             w="100%"
             size="lg"
             name="total"
-            value={saleData.currency_price * saleData.currency_charge}
+            value={saleData.currency_quantity * saleData.currency_charge}
             readOnly
           />
         </FormControl>
       </Flex>
-      <Button colorScheme="blue" size="lg" mt="4" onClick={handleAddSale}>
+      <Button
+        colorScheme="blue"
+        size="lg"
+        mt="4"
+        onClick={handleAddSale}
+        isLoading={isLoading}
+        loadingText="Adding sale"
+      >
         Add Sale
       </Button>
     </>

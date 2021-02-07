@@ -26,18 +26,22 @@ import {
   Box,
   IconButton,
   Link,
+  Spinner,
 } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
 import { addCustomerAPI, getCustomerAPI } from "../../api/customers";
 
 const Customers = () => {
   const [customersData, setCustomersData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getCustomers = async () => {
+      setIsLoading(true);
       const response = await getCustomerAPI();
       console.log(response.data);
       setCustomersData(response.data);
+      setIsLoading(false);
     };
     getCustomers();
   }, []);
@@ -195,33 +199,45 @@ const Customers = () => {
         </ModalContent>
       </Modal>
       {/* Update customer modal ends here */}
+      {isLoading && (
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+          mt="10"
+        />
+      )}
       {/* customer details table starts here */}
-      <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>Name</Th>
-              <Th>Phone Number</Th>
-              <Th>Charge</Th>
-              <Th></Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {customersData &&
-              customersData.map((customer, i) => (
-                <CustomerCard customer={customer} key={i} />
-              ))}
-          </Tbody>
-          <Tfoot>
-            <Tr>
-              <Th>Name</Th>
-              <Th>Phone Number</Th>
-              <Th>Charge</Th>
-              <Th></Th>
-            </Tr>
-          </Tfoot>
-        </Table>
-      </Box>
+      {!isLoading && (
+        <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                <Th>Name</Th>
+                <Th>Phone Number</Th>
+                <Th>Charge</Th>
+                <Th></Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {customersData &&
+                customersData.map((customer, i) => (
+                  <CustomerCard customer={customer} key={i} />
+                ))}
+            </Tbody>
+            <Tfoot>
+              <Tr>
+                <Th>Name</Th>
+                <Th>Phone Number</Th>
+                <Th>Charge</Th>
+                <Th></Th>
+              </Tr>
+            </Tfoot>
+          </Table>
+        </Box>
+      )}
       {/* customer details table ends here */}
     </div>
   );
