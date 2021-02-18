@@ -26,3 +26,13 @@ export const getCustomerByIdAPI = async (id) => {
     return await axios.get(`${apiRoot}/customer/${id}`);
   } catch (error) {}
 };
+
+//update customer opening balance
+export const updateCustomerObAPI = async (ob, id) => {
+  try {
+    return await axios.put(`${apiRoot}/customer/update_ob`, {
+      opening_balance: ob,
+      id,
+    });
+  } catch (error) {}
+};

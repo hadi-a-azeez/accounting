@@ -72,9 +72,28 @@ const Reports = () => {
     <div className={styles.container}>
       <SideBar />
       <TopBar label="Reports" />
+      <Flex direction="row" w="90%" ml="140px" mt="70px" alignSelf="flex-start">
+        {/* debit and credit */}
+        <Box
+          borderWidth="1px"
+          borderRadius="lg"
+          overflow="hidden"
+          w="20%"
+          h="auto"
+          p={4}
+          bg="gray.200"
+        >
+          <Text fontWeight="700" fontSize="20px">
+            Total stock: {total.purchase - total.sale}
+          </Text>
+          <Text fontWeight="700" fontSize="20px">
+            To Get: {total.sale - total.cash_receipt}
+          </Text>
+        </Box>
+      </Flex>
       {/*purchases starts here */}
       {isLoading && (
-        <Flex justifyContent="center" alignItems="center" w="100%" h="100vh">
+        <Flex justifyContent="center" alignItems="center" w="100%" h="80vh">
           <Spinner
             thickness="4px"
             speed="0.65s"
@@ -87,7 +106,7 @@ const Reports = () => {
       )}
       {purchaseHistory.length > 0 && (
         <>
-          <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="80px">
+          <Text fontWeight="600" alignSelf="flex-start" ml="140px">
             Purchase
           </Text>
           <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">

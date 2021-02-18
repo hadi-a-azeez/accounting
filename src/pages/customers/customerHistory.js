@@ -130,11 +130,20 @@ const CustomerHistory = (props) => {
           bg="gray.200"
           ml="3"
         >
-          <Text fontWeight="700" fontSize="20px">
-            To Pay: {total.purchase - total.payment}
+          <Text fontWeight="700" fontSize="17px">
+            Purchase: {total.purchase}
           </Text>
-          <Text fontWeight="700" fontSize="20px">
-            To Get: {total.sale - total.cash_receipt}
+          <Text fontWeight="700" fontSize="17px">
+            Sale: {total.sale}
+          </Text>
+          <Text fontWeight="700" fontSize="17px">
+            Payment: {total.payment}
+          </Text>
+          <Text fontWeight="700" fontSize="17px">
+            Exchange: {total.exchange}
+          </Text>
+          <Text fontWeight="700" fontSize="17px">
+            Balance: {customerDetails.opening_balance}
           </Text>
         </Box>
       </Flex>

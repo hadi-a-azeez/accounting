@@ -33,8 +33,12 @@ import { addCustomerAPI, getCustomerAPI } from "../../api/customers";
 
 const Customers = () => {
   const [customersData, setCustomersData] = useState([]);
+  const [customerDetails, setCustomerDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isBtnLoading, setIsBtnLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     const getCustomers = async () => {
@@ -47,19 +51,14 @@ const Customers = () => {
     getCustomers();
   }, []);
 
-  const { register, handleSubmit } = useForm();
-  const addCustomer = async (customer) => {
+  const addCustomer = async () => {
     setIsBtnLoading(true);
-    const response = await addCustomerAPI(customer);
+    const response = await addCustomerAPI(customerDetails);
     console.log(response);
     if (response.status === 200) {
       setIsBtnLoading(false);
     }
   };
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
-  const history = useHistory();
 
   const CustomerCard = ({ customer }) => {
     return (
@@ -109,12 +108,16 @@ const Customers = () => {
               <FormControl>
                 <FormLabel>Customer Name</FormLabel>
                 <Input
-                  name="customer_name"
-                  ref={register}
                   size="lg"
                   variant="filled"
                   w="100%"
                   placeholder="customer name"
+                  onChange={(e) =>
+                    setCustomerDetails({
+                      ...customerDetails,
+                      customer_name: e.target.value,
+                    })
+                  }
                 />
               </FormControl>
               <FormControl>
@@ -122,9 +125,12 @@ const Customers = () => {
                 <Input
                   type="number"
                   name="customer_phone"
-                  ref={register({
-                    valueAsNumber: true,
-                  })}
+                  onChange={(e) =>
+                    setCustomerDetails({
+                      ...customerDetails,
+                      customer_phone: parseInt(e.target.value),
+                    })
+                  }
                   size="lg"
                   variant="filled"
                   w="100%"
@@ -136,9 +142,29 @@ const Customers = () => {
                 <Input
                   type="number"
                   name="customer_charge"
-                  ref={register({
-                    valueAsNumber: true,
-                  })}
+                  onChange={(e) =>
+                    setCustomerDetails({
+                      ...customerDetails,
+                      customer_charge: parseFloat(e.target.value),
+                    })
+                  }
+                  size="lg"
+                  variant="filled"
+                  w="100%"
+                  placeholder="charge"
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Opening balance</FormLabel>
+                <Input
+                  type="number"
+                  name="opening_balance"
+                  onChange={(e) =>
+                    setCustomerDetails({
+                      ...customerDetails,
+                      opening_balance: parseFloat(e.target.value),
+                    })
+                  }
                   size="lg"
                   variant="filled"
                   w="100%"
@@ -151,7 +177,7 @@ const Customers = () => {
                 colorScheme="blue"
                 isLoading={isBtnLoading}
                 loadingText="Adding customer"
-                onClick={handleSubmit(addCustomer)}
+                onClick={addCustomer}
               >
                 Add Customer
               </Button>

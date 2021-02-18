@@ -1,6 +1,5 @@
 import {
   Select,
-  Box,
   FormControl,
   FormLabel,
   Input,
@@ -9,7 +8,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { searchCustomersAPI } from "../../api/customers";
+import {
+  getCustomerByIdAPI,
+  searchCustomersAPI,
+  updateCustomerObAPI,
+} from "../../api/customers";
 
 import DatePicker from "react-date-picker";
 import AsyncSelect from "react-select/async";
@@ -36,8 +39,18 @@ export const Payment = () => {
   };
   const handleAddPayment = async () => {
     setIsLoading(true);
-    console.log(paymentData);
+
+    //adding payment
     const response = await addPaymentAPI(paymentData);
+    //getting details of customer for updating opening balance
+    const customerDetails = await getCustomerByIdAPI(paymentData.customer_id);
+    const ob = customerDetails.data.opening_balance;
+    //updating opening balance
+    const updateOb = await updateCustomerObAPI(
+      parseFloat(ob - paymentData.currency_quantity),
+      paymentData.customer_id
+    );
+    console.log(updateOb);
 
     if (response.status === 200) {
       setIsLoading(false);
@@ -104,7 +117,7 @@ export const Payment = () => {
             onChange={(e) =>
               setPaymentData({
                 ...paymentData,
-                currency_quantity: parseInt(e.target.value),
+                currency_quantity: parseFloat(e.target.value),
               })
             }
           />

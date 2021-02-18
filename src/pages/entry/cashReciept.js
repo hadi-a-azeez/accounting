@@ -8,7 +8,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { searchCustomersAPI } from "../../api/customers";
+import {
+  getCustomerByIdAPI,
+  searchCustomersAPI,
+  updateCustomerObAPI,
+} from "../../api/customers";
 
 import DatePicker from "react-date-picker";
 import AsyncSelect from "react-select/async";
@@ -52,13 +56,40 @@ export const CashReciept = () => {
     };
     console.log(newExchangeData);
     console.log(cashRecieptData);
+
+    //adding cash receipt
     const responseCashReceipt = await addCashRecieptAPI(cashRecieptData);
+    //getting details of customer for updating opening balance
+    const customerDetails = await getCustomerByIdAPI(
+      cashRecieptData.customer_id
+    );
+    const ob = customerDetails.data.opening_balance;
+    //updating opening balance
+    const updateOb = await updateCustomerObAPI(
+      parseFloat(ob + cashRecieptData.currency_quantity),
+      cashRecieptData.customer_id
+    );
+    console.log(updateOb);
+
+    //adding exchange
     const responseExchange = await addExchangeAPI(newExchangeData);
+    //getting details of customer for updating opening balance
+    const customerDetailsTwo = await getCustomerByIdAPI(
+      exchangeData.customer_id
+    );
+    const obTwo = customerDetailsTwo.data.opening_balance;
+    //updating opening balance
+    const updateObTwo = await updateCustomerObAPI(
+      obTwo - exchangeData.currency_quantity * exchangeData.currency_charge,
+      exchangeData.customer_id
+    );
+    console.log(updateObTwo);
+
     if (responseCashReceipt.status === 200 && responseExchange.status === 200) {
       setIsLoading(false);
       toast({
         title: "Cash Receipt Added.",
-        description: "cash receipt addes successfully.",
+        description: "cash receipt added successfully.",
         status: "success",
         duration: 4000,
         isClosable: true,

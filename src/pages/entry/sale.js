@@ -8,7 +8,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { searchCustomersAPI } from "../../api/customers";
+import {
+  getCustomerByIdAPI,
+  searchCustomersAPI,
+  updateCustomerObAPI,
+} from "../../api/customers";
 
 import DatePicker from "react-date-picker";
 import AsyncSelect from "react-select/async";
@@ -40,8 +44,19 @@ export const Sale = () => {
       ...saleData,
       currency_total: saleData.currency_charge * saleData.currency_quantity,
     };
+
+    //adding sale
     const response = await addSaleAPI(newSale);
-    console.log(response);
+    //getting details of customer for updating opening balance
+    const customerDetails = await getCustomerByIdAPI(saleData.customer_id);
+    const ob = customerDetails.data.opening_balance;
+    //updating opening balance
+    const updateOb = await updateCustomerObAPI(
+      parseFloat(ob - saleData.currency_quantity * saleData.currency_charge),
+      saleData.customer_id
+    );
+    console.log(updateOb);
+
     if (response.status === 200) {
       setIsLoading(false);
       toast({
