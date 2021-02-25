@@ -12,7 +12,6 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
@@ -36,7 +35,6 @@ const Reports = () => {
     cash_receipt: 0,
     exchange: 0,
     payment: 0,
-    exchange: 0,
   });
 
   useEffect(() => {
@@ -63,7 +61,7 @@ const Reports = () => {
         payment: paymentData.data.sum_of_payments,
         exchange: exchangeData.data.sum_of_exchanges,
       });
-      console.log(cashReceiptData);
+      console.log(sumOfObData);
 
       setIsLoading(false);
     };
@@ -84,13 +82,10 @@ const Reports = () => {
           w="20%"
           h="auto"
           p={4}
-          bg="gray.200"
+          bg="white"
         >
           <Text fontWeight="700" fontSize="20px">
-            Total stock: {total.purchase - total.sale}
-          </Text>
-          <Text fontWeight="700" fontSize="20px">
-            To Get: {total.sale - total.cash_receipt}
+            Capital: {sumOfOb.sum_of_ob}
           </Text>
         </Box>
       </Flex>
@@ -110,9 +105,15 @@ const Reports = () => {
       {purchaseHistory.length > 0 && (
         <>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px">
-            Purchase
+            PURCHASE
           </Text>
-          <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+          <Box
+            w="80%"
+            mt="3"
+            borderRadius="3px"
+            background="white"
+            borderWidth="1px"
+          >
             <Table variant="simple">
               <Thead>
                 <Tr>
@@ -138,16 +139,6 @@ const Reports = () => {
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>Mode</Th>
-                  <Th>Date</Th>
-                  <Th>Customer</Th>
-                  <Th>Quantity</Th>
-                  <Th>Charge</Th>
-                  <Th>Total</Th>
-                </Tr>
-              </Tfoot>
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
@@ -160,9 +151,15 @@ const Reports = () => {
       {paymentHistory.length > 0 && (
         <>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
-            Payment
+            PAYMENT
           </Text>
-          <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+          <Box
+            w="80%"
+            mt="3"
+            borderRadius="3px"
+            background="white"
+            borderWidth="1px"
+          >
             <Table variant="simple">
               <Thead>
                 <Tr>
@@ -184,15 +181,6 @@ const Reports = () => {
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>Mode</Th>
-                  <Th>Date</Th>
-                  <Th>Customer</Th>
-                  <Th>Currency type</Th>
-                  <Th>Amount</Th>
-                </Tr>
-              </Tfoot>
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
@@ -205,9 +193,15 @@ const Reports = () => {
       {saleHistory.length > 0 && (
         <>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
-            Sale
+            SALE
           </Text>
-          <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+          <Box
+            w="80%"
+            mt="3"
+            borderRadius="3px"
+            background="white"
+            borderWidth="1px"
+          >
             <Table variant="simple">
               <Thead>
                 <Tr>
@@ -233,17 +227,6 @@ const Reports = () => {
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>Mode</Th>
-                  <Th>Date</Th>
-                  <Th>Customer</Th>
-                  <Th>Currency type</Th>
-                  <Th>Amount</Th>
-                  <Th>Charge</Th>
-                  <Th>Total</Th>
-                </Tr>
-              </Tfoot>
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
@@ -256,9 +239,15 @@ const Reports = () => {
       {cashReceiptHistory.length > 0 && (
         <>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
-            Cash receipt
+            CASH RECEIPT
           </Text>
-          <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+          <Box
+            w="80%"
+            mt="3"
+            borderRadius="3px"
+            background="white"
+            borderWidth="1px"
+          >
             <Table variant="simple">
               <Thead>
                 <Tr>
@@ -280,15 +269,6 @@ const Reports = () => {
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>Mode</Th>
-                  <Th>Customer</Th>
-                  <Th>Date</Th>
-                  <Th>Currency type</Th>
-                  <Th>Amount</Th>
-                </Tr>
-              </Tfoot>
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
@@ -301,9 +281,15 @@ const Reports = () => {
       {exchangeHistory.length > 0 && (
         <>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
-            Exchange
+            EXCHANGE
           </Text>
-          <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+          <Box
+            w="80%"
+            mt="3"
+            borderRadius="3px"
+            background="white"
+            borderWidth="1px"
+          >
             <Table variant="simple">
               <Thead>
                 <Tr>
@@ -329,17 +315,6 @@ const Reports = () => {
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>Mode</Th>
-                  <Th>Date</Th>
-                  <Th>Customer</Th>
-                  <Th>Currency type</Th>
-                  <Th>Amount</Th>
-                  <Th>Charge</Th>
-                  <Th>Total</Th>
-                </Tr>
-              </Tfoot>
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">

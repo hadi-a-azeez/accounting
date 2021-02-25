@@ -5,7 +5,6 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
@@ -94,7 +93,7 @@ const CustomerHistory = (props) => {
           w="30%"
           h="auto"
           p={4}
-          bg="gray.200"
+          bg="white"
         >
           {customerDetails && (
             <>
@@ -133,7 +132,7 @@ const CustomerHistory = (props) => {
           w="20%"
           h="auto"
           p={4}
-          bg="gray.200"
+          bg="white"
           ml="3"
         >
           <Text fontWeight="700" fontSize="17px">
@@ -167,9 +166,15 @@ const CustomerHistory = (props) => {
       {purchaseHistory.length > 0 && (
         <>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
-            Purchase
+            PURCHASE
           </Text>
-          <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+          <Box
+            w="80%"
+            mt="3"
+            borderRadius="3px"
+            background="white"
+            borderWidth="1px"
+          >
             <Table variant="simple">
               <Thead>
                 <Tr>
@@ -193,15 +198,6 @@ const CustomerHistory = (props) => {
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>Mode</Th>
-                  <Th>Date</Th>
-                  <Th>Quantity</Th>
-                  <Th>Charge</Th>
-                  <Th>Total</Th>
-                </Tr>
-              </Tfoot>
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
@@ -214,9 +210,15 @@ const CustomerHistory = (props) => {
       {paymentHistory.length > 0 && (
         <>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
-            Payment
+            PAYMENT
           </Text>
-          <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+          <Box
+            w="80%"
+            mt="3"
+            borderRadius="3px"
+            background="white"
+            borderWidth="1px"
+          >
             <Table variant="simple">
               <Thead>
                 <Tr>
@@ -236,14 +238,6 @@ const CustomerHistory = (props) => {
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>Mode</Th>
-                  <Th>Date</Th>
-                  <Th>Currency type</Th>
-                  <Th>Amount</Th>
-                </Tr>
-              </Tfoot>
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
@@ -256,9 +250,15 @@ const CustomerHistory = (props) => {
       {saleHistory.length > 0 && (
         <>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
-            Sale
+            SALE
           </Text>
-          <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+          <Box
+            w="80%"
+            mt="3"
+            borderRadius="3px"
+            background="white"
+            borderWidth="1px"
+          >
             <Table variant="simple">
               <Thead>
                 <Tr>
@@ -284,17 +284,6 @@ const CustomerHistory = (props) => {
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>Mode</Th>
-                  <Th>Date</Th>
-                  <Th>From</Th>
-                  <Th>Currency type</Th>
-                  <Th>Amount</Th>
-                  <Th>Charge</Th>
-                  <Th>Total</Th>
-                </Tr>
-              </Tfoot>
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
@@ -307,9 +296,15 @@ const CustomerHistory = (props) => {
       {cashReceiptHistory.length > 0 && (
         <>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
-            Cash receipt
+            CASH RECEIPT
           </Text>
-          <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+          <Box
+            w="80%"
+            mt="3"
+            borderRadius="3px"
+            background="white"
+            borderWidth="1px"
+          >
             <Table variant="simple">
               <Thead>
                 <Tr>
@@ -329,14 +324,6 @@ const CustomerHistory = (props) => {
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>Mode</Th>
-                  <Th>Date</Th>
-                  <Th>Currency type</Th>
-                  <Th>Amount</Th>
-                </Tr>
-              </Tfoot>
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
@@ -349,9 +336,15 @@ const CustomerHistory = (props) => {
       {exchangeHistory.length > 0 && (
         <>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
-            Exchange
+            EXCHANGE
           </Text>
-          <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+          <Box
+            w="80%"
+            mt="3"
+            borderRadius="3px"
+            background="white"
+            borderWidth="1px"
+          >
             <Table variant="simple">
               <Thead>
                 <Tr>
@@ -375,16 +368,6 @@ const CustomerHistory = (props) => {
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>Mode</Th>
-                  <Th>Date</Th>
-                  <Th>Currency type</Th>
-                  <Th>Amount</Th>
-                  <Th>Charge</Th>
-                  <Th>Total</Th>
-                </Tr>
-              </Tfoot>
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
@@ -397,9 +380,15 @@ const CustomerHistory = (props) => {
       {fromSaleHistory.length > 0 && (
         <>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
-            Sale To
+            SALE TO
           </Text>
-          <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+          <Box
+            w="80%"
+            mt="3"
+            borderRadius="3px"
+            background="white"
+            borderWidth="1px"
+          >
             <Table variant="simple">
               <Thead>
                 <Tr>
@@ -417,25 +406,14 @@ const CustomerHistory = (props) => {
                   <Tr key={sale.id}>
                     <Td>Sale</Td>
                     <Td>{sale.date}</Td>
-                    <Td>{sale.currency_type}</Td>
                     <Td>{sale.customer.customer_name}</Td>
+                    <Td>{sale.currency_type}</Td>
                     <Td>{sale.currency_quantity}</Td>
                     <Td>{sale.currency_charge}</Td>
                     <Td>{sale.currency_total}</Td>
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>Mode</Th>
-                  <Th>Date</Th>
-                  <Th>Customer</Th>
-                  <Th>Currency type</Th>
-                  <Th>Amount</Th>
-                  <Th>Charge</Th>
-                  <Th>Total</Th>
-                </Tr>
-              </Tfoot>
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">

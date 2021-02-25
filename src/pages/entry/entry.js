@@ -32,8 +32,10 @@ const Entry = () => {
         flexDirection="column"
         alignItems="center"
         w="70%"
-        shadow="lg"
+        bg="white"
         paddingBottom="10"
+        minH="500px"
+        borderWidth="1px"
       >
         <Flex
           dir="row"

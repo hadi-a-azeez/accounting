@@ -29,7 +29,7 @@ export const getCustomerByIdAPI = async (id) => {
 
 export const getSumOfObdAPI = async () => {
   try {
-    return await axios.get(`${apiRoot}/customer/sum_of_ob`);
+    return await axios.get(`${apiRoot}/customer/sum_ob`);
   } catch (error) {}
 };
 

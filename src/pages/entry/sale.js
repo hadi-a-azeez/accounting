@@ -127,7 +127,7 @@ export const Sale = () => {
             }
           />
         </FormControl>
-        <FormControl w="100%" ml="3">
+        <FormControl w="100%">
           <FormLabel>From</FormLabel>
           <AsyncSelect
             loadOptions={searchCustomers}
@@ -170,7 +170,7 @@ export const Sale = () => {
           />
         </FormControl>
 
-        <FormControl w="100%" ml="3">
+        <FormControl w="100%">
           <FormLabel>Conversion rate (AED)</FormLabel>
           <Input
             variant="filled"

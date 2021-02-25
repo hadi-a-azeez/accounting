@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import styles from "./css/customers.module.css";
 import SideBar from "../../components/sideBar";
@@ -247,7 +246,7 @@ const Customers = () => {
       )}
       {/* customer details table starts here */}
       {!isLoading && (
-        <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+        <Box w="80%" mt="3" borderRadius="3px" background="white">
           <Table variant="simple">
             <Thead>
               <Tr>
@@ -263,14 +262,6 @@ const Customers = () => {
                   <CustomerCard customer={customer} key={i} />
                 ))}
             </Tbody>
-            <Tfoot>
-              <Tr>
-                <Th>Name</Th>
-                <Th>Phone Number</Th>
-                <Th>Charge</Th>
-                <Th></Th>
-              </Tr>
-            </Tfoot>
           </Table>
         </Box>
       )}

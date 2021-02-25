@@ -4,7 +4,7 @@ import { Text } from "@chakra-ui/react";
 const TopBar = ({ label }) => {
   return (
     <div className={styles.topBar}>
-      <Text ml="100px" fontWeight="500" fontSize="22px">
+      <Text ml="5" fontWeight="500" fontSize="18px">
         {label}
       </Text>
     </div>
