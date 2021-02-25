@@ -7,8 +7,8 @@ import { getAllSaleHistoryAPI } from "../api/sale";
 import { getAllCashReceiptHistoryAPI } from "../api/cashReciept";
 import { getAllPaymentHistoryAPI } from "../api/payment";
 import { getAllExchangeHistoryAPI } from "../api/exchange";
+import { getSumOfObdAPI } from "../api/customers";
 import {
-  Button,
   Table,
   Thead,
   Tbody,
@@ -18,7 +18,6 @@ import {
   Td,
   Box,
   Text,
-  Stack,
   Flex,
   Spinner,
 } from "@chakra-ui/react";
@@ -29,6 +28,7 @@ const Reports = () => {
   const [cashReceiptHistory, setCashReceiptHistory] = useState([]);
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [exchangeHistory, setExchaneHistory] = useState([]);
+  const [sumOfOb, setSumOfOb] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [total, setTotal] = useState({
     sale: 0,
@@ -47,12 +47,14 @@ const Reports = () => {
       const cashReceiptData = await getAllCashReceiptHistoryAPI();
       const paymentData = await getAllPaymentHistoryAPI();
       const exchangeData = await getAllExchangeHistoryAPI();
+      const sumOfObData = await getSumOfObdAPI();
 
       setPurchaseHistory(purchaseData.data.purchases);
       setSaleHistory(saleData.data.sales);
       setCashReceiptHistory(cashReceiptData.data.cash_receipts);
       setPaymentHistory(paymentData.data.payments);
       setExchaneHistory(exchangeData.data.exchanges);
+      setSumOfOb(sumOfObData.data);
 
       setTotal({
         purchase: purchaseData.data.sum_of_purchases,
@@ -61,6 +63,7 @@ const Reports = () => {
         payment: paymentData.data.sum_of_payments,
         exchange: exchangeData.data.sum_of_exchanges,
       });
+      console.log(cashReceiptData);
 
       setIsLoading(false);
     };
@@ -115,6 +118,7 @@ const Reports = () => {
                 <Tr>
                   <Th>Mode</Th>
                   <Th>Date</Th>
+                  <Th>Customer</Th>
                   <Th>Quantity</Th>
                   <Th>Charge</Th>
                   <Th>Total</Th>
@@ -125,6 +129,7 @@ const Reports = () => {
                   <Tr key={purchase.id}>
                     <Td>Purchase</Td>
                     <Td>{purchase.date}</Td>
+                    <Td>{purchase.customer.customer_name}</Td>
                     <Td>{purchase.currency_quantity}</Td>
                     <Td>{purchase.currency_charge}</Td>
                     <Td>
@@ -137,6 +142,7 @@ const Reports = () => {
                 <Tr>
                   <Th>Mode</Th>
                   <Th>Date</Th>
+                  <Th>Customer</Th>
                   <Th>Quantity</Th>
                   <Th>Charge</Th>
                   <Th>Total</Th>
@@ -162,6 +168,7 @@ const Reports = () => {
                 <Tr>
                   <Th>Mode</Th>
                   <Th>Date</Th>
+                  <Th>Customer</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
                 </Tr>
@@ -171,6 +178,7 @@ const Reports = () => {
                   <Tr key={payment.id}>
                     <Td>Payment</Td>
                     <Td>{payment.date}</Td>
+                    <Td>{payment.customer.customer_name}</Td>
                     <Td>{payment.currency_type}</Td>
                     <Td>{payment.currency_quantity}</Td>
                   </Tr>
@@ -180,6 +188,7 @@ const Reports = () => {
                 <Tr>
                   <Th>Mode</Th>
                   <Th>Date</Th>
+                  <Th>Customer</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
                 </Tr>
@@ -204,6 +213,7 @@ const Reports = () => {
                 <Tr>
                   <Th>Mode</Th>
                   <Th>Date</Th>
+                  <Th>Customer</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
                   <Th>Charge</Th>
@@ -215,6 +225,7 @@ const Reports = () => {
                   <Tr key={sale.id}>
                     <Td>Sale</Td>
                     <Td>{sale.date}</Td>
+                    <Td>{sale.customer.customer_name}</Td>
                     <Td>{sale.currency_type}</Td>
                     <Td>{sale.currency_quantity}</Td>
                     <Td>{sale.currency_charge}</Td>
@@ -226,6 +237,7 @@ const Reports = () => {
                 <Tr>
                   <Th>Mode</Th>
                   <Th>Date</Th>
+                  <Th>Customer</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
                   <Th>Charge</Th>
@@ -252,6 +264,7 @@ const Reports = () => {
                 <Tr>
                   <Th>Mode</Th>
                   <Th>Date</Th>
+                  <Th>Customer</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
                 </Tr>
@@ -261,6 +274,7 @@ const Reports = () => {
                   <Tr key={cashReceipt.id}>
                     <Td>Cash Reciept</Td>
                     <Td>{cashReceipt.date}</Td>
+                    <Td>{cashReceipt.customer.customer_name}</Td>
                     <Td>{cashReceipt.currency_type}</Td>
                     <Td>{cashReceipt.currency_quantity}</Td>
                   </Tr>
@@ -269,6 +283,7 @@ const Reports = () => {
               <Tfoot>
                 <Tr>
                   <Th>Mode</Th>
+                  <Th>Customer</Th>
                   <Th>Date</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
@@ -294,6 +309,7 @@ const Reports = () => {
                 <Tr>
                   <Th>Mode</Th>
                   <Th>Date</Th>
+                  <Th>Customer</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
                   <Th>Charge</Th>
@@ -305,6 +321,7 @@ const Reports = () => {
                   <Tr key={exchange.id}>
                     <Td>Exchange</Td>
                     <Td>{exchange.date}</Td>
+                    <Td>{exchange.customer.customer_name}</Td>
                     <Td>{exchange.currency_type}</Td>
                     <Td>{exchange.currency_quantity}</Td>
                     <Td>{exchange.currency_charge}</Td>
@@ -316,6 +333,7 @@ const Reports = () => {
                 <Tr>
                   <Th>Mode</Th>
                   <Th>Date</Th>
+                  <Th>Customer</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
                   <Th>Charge</Th>

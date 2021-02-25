@@ -3,7 +3,7 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Flex,
+  SimpleGrid,
   Button,
   useToast,
 } from "@chakra-ui/react";
@@ -24,7 +24,12 @@ export const Sale = () => {
     currency_charge: 0,
     currency_type: "SR",
     customer_id: 0,
+    from_customer: 0,
     date: new Date(),
+  });
+  const [conversionRate, setConversionRate] = useState({
+    sr: 0,
+    aed: 0,
   });
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -40,19 +45,33 @@ export const Sale = () => {
   };
   const handleAddSale = async () => {
     setIsLoading(true);
-    const newSale = {
+
+    let newSale = {
       ...saleData,
-      currency_total: saleData.currency_charge * saleData.currency_quantity,
+      currency_total:
+        (saleData.currency_charge * saleData.currency_quantity) /
+        conversionRate.aed,
     };
+    /* saleData.currency_type !== "AED"
+      ? (newSale = {
+          ...saleData,
+          currency_total:
+            (saleData.currency_charge * saleData.currency_quantity) /
+            conversionRate.aed,
+        })
+      : (newSale = {
+          ...saleData,
+          currency_total: saleData.currency_charge * saleData.currency_quantity,
+        }); */
 
     //adding sale
     const response = await addSaleAPI(newSale);
     //getting details of customer for updating opening balance
     const customerDetails = await getCustomerByIdAPI(saleData.customer_id);
-    const ob = customerDetails.data.opening_balance;
+    const ob = parseFloat(customerDetails.data.opening_balance);
     //updating opening balance
     const updateOb = await updateCustomerObAPI(
-      parseFloat(ob - saleData.currency_quantity * saleData.currency_charge),
+      parseFloat(ob - newSale.currency_total),
       saleData.customer_id
     );
     console.log(updateOb);
@@ -71,8 +90,8 @@ export const Sale = () => {
 
   return (
     <>
-      <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
-        <FormControl w="25%">
+      <SimpleGrid columns={3} spacing={3} w="70%" justifyContent="center">
+        <FormControl w="100%">
           <FormLabel>Currency</FormLabel>
           <Select
             variant="filled"
@@ -89,7 +108,7 @@ export const Sale = () => {
             <option value="INR">INR</option>
           </Select>
         </FormControl>
-        <FormControl w="25%" ml="3">
+        <FormControl w="100%" ml="3">
           <FormLabel>Date</FormLabel>
           <DatePicker
             format="dd/MM/yyyy"
@@ -99,7 +118,7 @@ export const Sale = () => {
             }}
           />
         </FormControl>
-        <FormControl w="25%" ml="3">
+        <FormControl w="100%" ml="3">
           <FormLabel>Customer</FormLabel>
           <AsyncSelect
             loadOptions={searchCustomers}
@@ -108,10 +127,17 @@ export const Sale = () => {
             }
           />
         </FormControl>
-      </Flex>
+        <FormControl w="100%" ml="3">
+          <FormLabel>From</FormLabel>
+          <AsyncSelect
+            loadOptions={searchCustomers}
+            onChange={(input) =>
+              setSaleData({ ...saleData, from_customer: input.value })
+            }
+          />
+        </FormControl>
 
-      <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
-        <FormControl w="25%">
+        <FormControl w="100%" ml="3">
           <FormLabel>Quantity</FormLabel>
           <Input
             type="number"
@@ -127,7 +153,7 @@ export const Sale = () => {
             }
           />
         </FormControl>
-        <FormControl w="25%" ml="3">
+        <FormControl w="100%" ml="3">
           <FormLabel>Charge</FormLabel>
           <Input
             type="number"
@@ -143,18 +169,45 @@ export const Sale = () => {
             }
           />
         </FormControl>
-        <FormControl w="25%" ml="3">
-          <FormLabel>Total</FormLabel>
+
+        <FormControl w="100%" ml="3">
+          <FormLabel>Conversion rate (AED)</FormLabel>
           <Input
             variant="filled"
             w="100%"
             size="lg"
             name="total"
+            onChange={(e) => setConversionRate({ aed: e.target.value })}
+          />
+        </FormControl>
+
+        <FormControl w="100%" ml="3">
+          <FormLabel>Total</FormLabel>
+          <Input
+            type="number"
+            variant="filled"
+            w="100%"
+            size="lg"
             value={saleData.currency_quantity * saleData.currency_charge}
             readOnly
           />
         </FormControl>
-      </Flex>
+
+        <FormControl w="100%" ml="3">
+          <FormLabel>Total (AED)</FormLabel>
+          <Input
+            type="number"
+            variant="filled"
+            w="100%"
+            size="lg"
+            value={
+              (saleData.currency_quantity * saleData.currency_charge) /
+              conversionRate.aed
+            }
+            readOnly
+          />
+        </FormControl>
+      </SimpleGrid>
       <Button
         colorScheme="blue"
         size="lg"

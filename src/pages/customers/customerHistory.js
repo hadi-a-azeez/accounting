@@ -20,7 +20,7 @@ import SideBar from "../../components/sideBar";
 import UpdateCustomer from "../../components/updateCustomer";
 import { getCustomerByIdAPI } from "../../api/customers";
 import { getPurchaseHistoryAPI } from "../../api/purchase";
-import { getSaleHistoryAPI } from "../../api/sale";
+import { getSaleHistoryAPI, getFromSaleHistoryAPI } from "../../api/sale";
 import { getCashReceiptHistoryAPI } from "../../api/cashReciept";
 import { getPaymentHistoryAPI } from "../../api/payment";
 import { getExchangeHistoryAPI } from "../../api/exchange";
@@ -30,11 +30,13 @@ const CustomerHistory = (props) => {
   const [customerDetails, setCustomerDetails] = useState({});
   const [purchaseHistory, setPurchaseHistory] = useState([]);
   const [saleHistory, setSaleHistory] = useState([]);
+  const [fromSaleHistory, setFromSaleHistory] = useState([]);
   const [cashReceiptHistory, setCashReceiptHistory] = useState([]);
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [exchangeHistory, setExchaneHistory] = useState([]);
   const [total, setTotal] = useState({
     sale: 0,
+    from_sale: 0,
     purchase: 0,
     cash_receipt: 0,
     exchange: 0,
@@ -50,6 +52,7 @@ const CustomerHistory = (props) => {
       const userData = await getCustomerByIdAPI(id);
       const purchaseData = await getPurchaseHistoryAPI(id);
       const saleData = await getSaleHistoryAPI(id);
+      const fromSaleData = await getFromSaleHistoryAPI(id);
       const cashReceiptData = await getCashReceiptHistoryAPI(id);
       const paymentData = await getPaymentHistoryAPI(id);
       const exchangeData = await getExchangeHistoryAPI(id);
@@ -57,6 +60,7 @@ const CustomerHistory = (props) => {
       setCustomerDetails(userData.data);
       setPurchaseHistory(purchaseData.data.purchases);
       setSaleHistory(saleData.data.sales);
+      setFromSaleHistory(fromSaleData.data.sales);
       setCashReceiptHistory(cashReceiptData.data.cash_receipts);
       setPaymentHistory(paymentData.data.payments);
       setExchaneHistory(exchangeData.data.exchanges);
@@ -64,10 +68,12 @@ const CustomerHistory = (props) => {
       setTotal({
         purchase: purchaseData.data.sum_of_purchases,
         sale: saleData.data.sum_of_sales,
+        from_sale: fromSaleData.data.sum_of_sales,
         cash_receipt: cashReceiptData.data.sum_of_cash_receipts,
         payment: paymentData.data.sum_of_payments,
         exchange: exchangeData.data.sum_of_exchanges,
       });
+      console.log(fromSaleHistory);
 
       setIsLoading(false);
     };
@@ -258,6 +264,7 @@ const CustomerHistory = (props) => {
                 <Tr>
                   <Th>Mode</Th>
                   <Th>Date</Th>
+                  <Th>From</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
                   <Th>Charge</Th>
@@ -269,6 +276,7 @@ const CustomerHistory = (props) => {
                   <Tr key={sale.id}>
                     <Td>Sale</Td>
                     <Td>{sale.date}</Td>
+                    <Td>{sale.from_customer_customer.customer_name}</Td>
                     <Td>{sale.currency_type}</Td>
                     <Td>{sale.currency_quantity}</Td>
                     <Td>{sale.currency_charge}</Td>
@@ -280,6 +288,7 @@ const CustomerHistory = (props) => {
                 <Tr>
                   <Th>Mode</Th>
                   <Th>Date</Th>
+                  <Th>From</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
                   <Th>Charge</Th>
@@ -384,6 +393,57 @@ const CustomerHistory = (props) => {
         </>
       )}
       {/* exchange table ends here */}
+      {/* Sale to table starts here */}
+      {fromSaleHistory.length > 0 && (
+        <>
+          <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="4">
+            Sale To
+          </Text>
+          <Box w="80%" boxShadow="lg" mt="3" borderRadius="8px">
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>Mode</Th>
+                  <Th>Date</Th>
+                  <Th>Customer</Th>
+                  <Th>Currency type</Th>
+                  <Th>Amount</Th>
+                  <Th>Charge</Th>
+                  <Th>Total</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {fromSaleHistory.map((sale) => (
+                  <Tr key={sale.id}>
+                    <Td>Sale</Td>
+                    <Td>{sale.date}</Td>
+                    <Td>{sale.currency_type}</Td>
+                    <Td>{sale.customer.customer_name}</Td>
+                    <Td>{sale.currency_quantity}</Td>
+                    <Td>{sale.currency_charge}</Td>
+                    <Td>{sale.currency_total}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+              <Tfoot>
+                <Tr>
+                  <Th>Mode</Th>
+                  <Th>Date</Th>
+                  <Th>Customer</Th>
+                  <Th>Currency type</Th>
+                  <Th>Amount</Th>
+                  <Th>Charge</Th>
+                  <Th>Total</Th>
+                </Tr>
+              </Tfoot>
+            </Table>
+          </Box>
+          <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
+            Total Sales: {total.from_sale}
+          </Text>
+        </>
+      )}
+      {/* Sale to table ends here */}
     </div>
   );
 };

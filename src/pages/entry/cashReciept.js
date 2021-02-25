@@ -34,6 +34,7 @@ export const CashReciept = () => {
 
     date: new Date(),
   });
+
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
@@ -52,24 +53,35 @@ export const CashReciept = () => {
     const newExchangeData = {
       ...exchangeData,
       currency_total:
-        exchangeData.currency_quantity * exchangeData.currency_charge,
+        exchangeData.currency_quantity / exchangeData.currency_charge,
     };
-    console.log(newExchangeData);
-    console.log(cashRecieptData);
+    let newCashReceiptData = {};
+    cashRecieptData.currency_type !== "AED"
+      ? (newCashReceiptData = {
+          ...cashRecieptData,
+          currency_quantity:
+            cashRecieptData.currency_quantity / exchangeData.currency_charge,
+        })
+      : (newCashReceiptData = {
+          ...cashRecieptData,
+          currency_quantity: cashRecieptData.currency_quantity,
+        });
 
     //adding cash receipt
-    const responseCashReceipt = await addCashRecieptAPI(cashRecieptData);
+    const responseCashReceipt = await addCashRecieptAPI(newCashReceiptData);
+    console.log(responseExchange);
     //getting details of customer for updating opening balance
     const customerDetails = await getCustomerByIdAPI(
       cashRecieptData.customer_id
     );
+    console.log(customerDetails);
     const ob = customerDetails.data.opening_balance;
     //updating opening balance
+    let newOb = parseFloat(ob) + newCashReceiptData.currency_quantity;
     const updateOb = await updateCustomerObAPI(
-      parseFloat(ob + cashRecieptData.currency_quantity),
+      newOb,
       cashRecieptData.customer_id
     );
-    console.log(updateOb);
 
     //adding exchange
     const responseExchange = await addExchangeAPI(newExchangeData);
@@ -77,15 +89,15 @@ export const CashReciept = () => {
     const customerDetailsTwo = await getCustomerByIdAPI(
       exchangeData.customer_id
     );
-    const obTwo = customerDetailsTwo.data.opening_balance;
+    const obTwo = parseFloat(customerDetailsTwo.data.opening_balance);
     //updating opening balance
     const updateObTwo = await updateCustomerObAPI(
-      obTwo - exchangeData.currency_quantity * exchangeData.currency_charge,
+      obTwo + exchangeData.currency_quantity / exchangeData.currency_charge,
       exchangeData.customer_id
     );
     console.log(updateObTwo);
 
-    if (responseCashReceipt.status === 200 && responseExchange.status === 200) {
+    if (responseCashReceipt.status === 200) {
       setIsLoading(false);
       toast({
         title: "Cash Receipt Added.",
@@ -173,7 +185,7 @@ export const CashReciept = () => {
         {cashRecieptData.currency_type === "SR" && (
           <>
             <FormControl w="25%" ml="3">
-              <FormLabel>Convertion rate</FormLabel>
+              <FormLabel>Conversion rate</FormLabel>
               <Input
                 type="number"
                 variant="filled"
@@ -195,7 +207,7 @@ export const CashReciept = () => {
                 size="lg"
                 name="total"
                 value={
-                  cashRecieptData.currency_quantity *
+                  cashRecieptData.currency_quantity /
                   exchangeData.currency_charge
                 }
                 readOnly

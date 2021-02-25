@@ -27,6 +27,12 @@ export const getCustomerByIdAPI = async (id) => {
   } catch (error) {}
 };
 
+export const getSumOfObdAPI = async () => {
+  try {
+    return await axios.get(`${apiRoot}/customer/sum_of_ob`);
+  } catch (error) {}
+};
+
 //update customer opening balance
 export const updateCustomerObAPI = async (ob, id) => {
   try {
@@ -34,5 +40,7 @@ export const updateCustomerObAPI = async (ob, id) => {
       opening_balance: ob,
       id,
     });
-  } catch (error) {}
+  } catch (error) {
+    return error;
+  }
 };

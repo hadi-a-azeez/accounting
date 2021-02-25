@@ -3,8 +3,8 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Flex,
   Button,
+  SimpleGrid,
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -25,6 +25,10 @@ export const Payment = () => {
     customer_id: 0,
     date: new Date(),
   });
+  const [conversionRate, setConversionRate] = useState({
+    sr: 0,
+    aed: 0,
+  });
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
@@ -37,17 +41,30 @@ export const Payment = () => {
 
     callBack(filteredResponse);
   };
+
   const handleAddPayment = async () => {
     setIsLoading(true);
 
+    let newPaymentData = {};
+    paymentData.currency_type !== "AED"
+      ? (newPaymentData = {
+          ...paymentData,
+          currency_quantity: paymentData.currency_quantity / conversionRate.aed,
+        })
+      : (newPaymentData = {
+          ...paymentData,
+          currency_quantity: paymentData.currency_quantity,
+        });
+
     //adding payment
-    const response = await addPaymentAPI(paymentData);
+    const response = await addPaymentAPI(newPaymentData);
+
     //getting details of customer for updating opening balance
     const customerDetails = await getCustomerByIdAPI(paymentData.customer_id);
-    const ob = customerDetails.data.opening_balance;
+    const ob = parseFloat(customerDetails.data.opening_balance);
     //updating opening balance
     const updateOb = await updateCustomerObAPI(
-      parseFloat(ob - paymentData.currency_quantity),
+      parseFloat(ob - newPaymentData.currency_quantity),
       paymentData.customer_id
     );
     console.log(updateOb);
@@ -66,8 +83,8 @@ export const Payment = () => {
 
   return (
     <>
-      <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
-        <FormControl w="25%">
+      <SimpleGrid columns={3} spacing={3} w="70%" justifyContent="center">
+        <FormControl w="100%">
           <FormLabel>Currency</FormLabel>
           <Select
             variant="filled"
@@ -84,7 +101,7 @@ export const Payment = () => {
             <option value="INR">INR</option>
           </Select>
         </FormControl>
-        <FormControl w="25%" ml="3">
+        <FormControl w="100%" ml="3">
           <FormLabel>Date</FormLabel>
           <DatePicker
             format="dd/MM/yyyy"
@@ -94,7 +111,7 @@ export const Payment = () => {
             }}
           />
         </FormControl>
-        <FormControl w="25%" ml="3">
+        <FormControl w="100%" ml="3">
           <FormLabel>Customer</FormLabel>
           <AsyncSelect
             loadOptions={searchCustomers}
@@ -103,10 +120,8 @@ export const Payment = () => {
             }
           />
         </FormControl>
-      </Flex>
 
-      <Flex dir="row" w="70%" mt="3" d="flex" justifyContent="flex-start">
-        <FormControl w="25%">
+        <FormControl w="100%">
           <FormLabel>Amount</FormLabel>
           <Input
             type="number"
@@ -122,7 +137,32 @@ export const Payment = () => {
             }
           />
         </FormControl>
-      </Flex>
+        {paymentData.currency_type !== "AED" && (
+          <FormControl w="100%" ml="3">
+            <FormLabel>Conversion rate (AED)</FormLabel>
+            <Input
+              variant="filled"
+              w="100%"
+              size="lg"
+              name="total"
+              onChange={(e) => setConversionRate({ aed: e.target.value })}
+            />
+          </FormControl>
+        )}
+        {paymentData.currency_type !== "AED" && (
+          <FormControl w="100%" ml="3">
+            <FormLabel>Total (AED)</FormLabel>
+            <Input
+              type="number"
+              variant="filled"
+              w="100%"
+              size="lg"
+              value={paymentData.currency_quantity / conversionRate.aed}
+              readOnly
+            />
+          </FormControl>
+        )}
+      </SimpleGrid>
       <Button
         colorScheme="blue"
         size="lg"

@@ -1,10 +1,9 @@
 import {
   Select,
-  Box,
   FormControl,
   FormLabel,
   Input,
-  Flex,
+  SimpleGrid,
   Button,
   useToast,
 } from "@chakra-ui/react";
@@ -25,8 +24,11 @@ export const Purchase = () => {
     currency_charge: 0,
     currency_type: "SR",
     customer_id: 0,
-
     date: new Date(),
+  });
+  const [conversionRate, setConversionRate] = useState({
+    sr: 0,
+    aed: 0,
   });
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -40,31 +42,38 @@ export const Purchase = () => {
 
     callBack(filteredResponse);
   };
+
   const handleAddPurchase = async () => {
     setIsLoading(true);
-    const newPurchase = {
-      ...purchaseData,
-      currency_total:
-        purchaseData.currency_charge * purchaseData.currency_quantity,
-    };
+    let newPurchase = {};
+    purchaseData.currency_type !== "AED"
+      ? (newPurchase = {
+          ...purchaseData,
+          currency_total:
+            (purchaseData.currency_charge * purchaseData.currency_quantity) /
+            conversionRate.aed,
+        })
+      : (newPurchase = {
+          ...purchaseData,
+          currency_total:
+            purchaseData.currency_charge * purchaseData.currency_quantity,
+        });
+
+    //adding purchase
+    const responsePurchase = await addPurchaseAPI(newPurchase);
+    console.log(responsePurchase);
 
     //getting details of customer for updating opening balance
     const customerDetails = await getCustomerByIdAPI(purchaseData.customer_id);
-    const ob = customerDetails.data.opening_balance;
-
+    const ob = parseFloat(customerDetails.data.opening_balance);
     //updating opening balance
     const updateOb = await updateCustomerObAPI(
-      parseFloat(
-        ob + purchaseData.currency_charge * purchaseData.currency_quantity
-      ),
+      parseFloat(ob + newPurchase.currency_total),
       purchaseData.customer_id
     );
     console.log(updateOb);
 
-    //adding purchase
-    const response = await addPurchaseAPI(newPurchase);
-    console.log(response);
-    if (response.status === 200) {
+    if (responsePurchase.status === 200) {
       setIsLoading(false);
       toast({
         title: "Purchase Added.",
@@ -78,8 +87,8 @@ export const Purchase = () => {
 
   return (
     <>
-      <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
-        <FormControl w="25%">
+      <SimpleGrid columns={3} spacing={3} w="70%" justifyContent="center">
+        <FormControl w="100%">
           <FormLabel>Currency</FormLabel>
           <Select
             variant="filled"
@@ -96,7 +105,7 @@ export const Purchase = () => {
             <option value="INR">INR</option>
           </Select>
         </FormControl>
-        <FormControl w="25%" ml="3">
+        <FormControl w="100%" ml="3">
           <FormLabel>Date</FormLabel>
           <DatePicker
             format="dd/MM/yyyy"
@@ -106,7 +115,7 @@ export const Purchase = () => {
             }}
           />
         </FormControl>
-        <FormControl w="25%" ml="3">
+        <FormControl w="100%" ml="3">
           <FormLabel>Customer</FormLabel>
           <AsyncSelect
             loadOptions={searchCustomers}
@@ -115,10 +124,8 @@ export const Purchase = () => {
             }
           />
         </FormControl>
-      </Flex>
 
-      <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
-        <FormControl w="25%">
+        <FormControl w="100%">
           <FormLabel>Quantity</FormLabel>
           <Input
             type="number"
@@ -134,7 +141,7 @@ export const Purchase = () => {
             }
           />
         </FormControl>
-        <FormControl w="25%" ml="3">
+        <FormControl w="100%" ml="3">
           <FormLabel>Charge</FormLabel>
           <Input
             type="number"
@@ -150,20 +157,50 @@ export const Purchase = () => {
             }
           />
         </FormControl>
-        <FormControl w="25%" ml="3">
+        {purchaseData.currency_type !== "AED" && (
+          <FormControl w="100%" ml="3">
+            <FormLabel>Conversion rate (AED)</FormLabel>
+            <Input
+              variant="filled"
+              w="100%"
+              size="lg"
+              name="total"
+              onChange={(e) => setConversionRate({ aed: e.target.value })}
+            />
+          </FormControl>
+        )}
+
+        <FormControl w="100%" ml="3">
           <FormLabel>Total</FormLabel>
           <Input
+            type="number"
             variant="filled"
             w="100%"
             size="lg"
-            name="total"
             value={
               purchaseData.currency_quantity * purchaseData.currency_charge
             }
             readOnly
           />
         </FormControl>
-      </Flex>
+        {purchaseData.currency_type !== "AED" && (
+          <FormControl w="100%" ml="3">
+            <FormLabel>Total (AED)</FormLabel>
+            <Input
+              type="number"
+              variant="filled"
+              w="100%"
+              size="lg"
+              value={
+                (purchaseData.currency_quantity *
+                  purchaseData.currency_charge) /
+                conversionRate.aed
+              }
+              readOnly
+            />
+          </FormControl>
+        )}
+      </SimpleGrid>
       <Button
         colorScheme="blue"
         size="lg"
