@@ -45,19 +45,24 @@ export const Purchase = () => {
 
   const handleAddPurchase = async () => {
     setIsLoading(true);
-    let newPurchase = {};
-    purchaseData.currency_type !== "AED"
-      ? (newPurchase = {
-          ...purchaseData,
-          currency_total:
-            (purchaseData.currency_charge * purchaseData.currency_quantity) /
-            conversionRate.aed,
-        })
-      : (newPurchase = {
-          ...purchaseData,
-          currency_total:
-            purchaseData.currency_charge * purchaseData.currency_quantity,
-        });
+    let newPurchase = {
+      ...purchaseData,
+      currency_total:
+        (purchaseData.currency_charge * purchaseData.currency_quantity) /
+        conversionRate.aed,
+    };
+    // purchaseData.currency_type !== "AED"
+    //   ? (newPurchase = {
+    //       ...purchaseData,
+    //       currency_total:
+    //         (purchaseData.currency_charge * purchaseData.currency_quantity) /
+    //         conversionRate.aed,
+    //     })
+    //   : (newPurchase = {
+    //       ...purchaseData,
+    //       currency_total:
+    //         purchaseData.currency_charge * purchaseData.currency_quantity,
+    //     });
 
     //adding purchase
     const responsePurchase = await addPurchaseAPI(newPurchase);
@@ -157,18 +162,17 @@ export const Purchase = () => {
             }
           />
         </FormControl>
-        {purchaseData.currency_type !== "AED" && (
-          <FormControl w="100%" ml="3">
-            <FormLabel>Conversion rate (AED)</FormLabel>
-            <Input
-              variant="filled"
-              w="100%"
-              size="lg"
-              name="total"
-              onChange={(e) => setConversionRate({ aed: e.target.value })}
-            />
-          </FormControl>
-        )}
+
+        <FormControl w="100%" ml="3">
+          <FormLabel>Conversion rate (AED)</FormLabel>
+          <Input
+            variant="filled"
+            w="100%"
+            size="lg"
+            name="total"
+            onChange={(e) => setConversionRate({ aed: e.target.value })}
+          />
+        </FormControl>
 
         <FormControl w="100%" ml="3">
           <FormLabel>Total</FormLabel>
@@ -183,23 +187,20 @@ export const Purchase = () => {
             readOnly
           />
         </FormControl>
-        {purchaseData.currency_type !== "AED" && (
-          <FormControl w="100%" ml="3">
-            <FormLabel>Total (AED)</FormLabel>
-            <Input
-              type="number"
-              variant="filled"
-              w="100%"
-              size="lg"
-              value={
-                (purchaseData.currency_quantity *
-                  purchaseData.currency_charge) /
-                conversionRate.aed
-              }
-              readOnly
-            />
-          </FormControl>
-        )}
+        <FormControl w="100%" ml="3">
+          <FormLabel>Total (AED)</FormLabel>
+          <Input
+            type="number"
+            variant="filled"
+            w="100%"
+            size="lg"
+            value={
+              (purchaseData.currency_quantity * purchaseData.currency_charge) /
+              conversionRate.aed
+            }
+            readOnly
+          />
+        </FormControl>
       </SimpleGrid>
       <Button
         colorScheme="blue"
