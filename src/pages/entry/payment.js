@@ -53,7 +53,7 @@ export const Payment = () => {
         })
       : (newPaymentData = {
           ...paymentData,
-          currency_quantity: paymentData.currency_quantity,
+          currency_quantity_aed: paymentData.currency_quantity,
         });
 
     //adding payment
