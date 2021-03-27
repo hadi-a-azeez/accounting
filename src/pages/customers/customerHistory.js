@@ -145,6 +145,9 @@ const CustomerHistory = (props) => {
             Payment: {total.payment}
           </Text>
           <Text fontWeight="700" fontSize="17px">
+            Cash Receipt: {total.cash_receipt}
+          </Text>
+          <Text fontWeight="700" fontSize="17px">
             Exchange: {total.exchange}
           </Text>
           <Text fontWeight="700" fontSize="17px">
@@ -182,7 +185,9 @@ const CustomerHistory = (props) => {
                   <Th>Date</Th>
                   <Th>Quantity</Th>
                   <Th>Charge</Th>
-                  <Th>Total</Th>
+                  <Th>Commission</Th>
+                  <Th>Total To Give</Th>
+                  <Th>Total Got</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -192,9 +197,9 @@ const CustomerHistory = (props) => {
                     <Td>{purchase.date}</Td>
                     <Td>{purchase.currency_quantity}</Td>
                     <Td>{purchase.currency_charge}</Td>
-                    <Td>
-                      {purchase.currency_quantity * purchase.currency_charge}
-                    </Td>
+                    <Td>{purchase.commission}</Td>
+                    <Td>{purchase.currency_to_give}</Td>
+                    <Td>{purchase.currency_got}</Td>
                   </Tr>
                 ))}
               </Tbody>
@@ -311,7 +316,8 @@ const CustomerHistory = (props) => {
                   <Th>Mode</Th>
                   <Th>Date</Th>
                   <Th>Currency type</Th>
-                  <Th>Amount</Th>
+                  <Th>Amount(SR)</Th>
+                  <Th>Amount(AED)</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -321,6 +327,7 @@ const CustomerHistory = (props) => {
                     <Td>{cashReceipt.date}</Td>
                     <Td>{cashReceipt.currency_type}</Td>
                     <Td>{cashReceipt.currency_quantity}</Td>
+                    <Td>{cashReceipt.currency_quantity_aed}</Td>
                   </Tr>
                 ))}
               </Tbody>
