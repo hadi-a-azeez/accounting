@@ -70,7 +70,7 @@ export const Payment = () => {
       );
     } else {
       const updateOb = await updateCustomerObAPI(
-        parseFloat(ob - newPaymentData.currency_quantity_aed),
+        parseFloat(ob + newPaymentData.currency_quantity_aed),
         paymentData.customer_id
       );
     }
