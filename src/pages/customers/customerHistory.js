@@ -231,6 +231,7 @@ const CustomerHistory = (props) => {
                   <Th>Date</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
+                  <Th>Amount(AED)</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -240,6 +241,7 @@ const CustomerHistory = (props) => {
                     <Td>{payment.date}</Td>
                     <Td>{payment.currency_type}</Td>
                     <Td>{payment.currency_quantity}</Td>
+                    <Td>{payment.currency_quantity_aed}</Td>
                   </Tr>
                 ))}
               </Tbody>

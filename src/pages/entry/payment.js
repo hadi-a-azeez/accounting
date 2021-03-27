@@ -22,13 +22,12 @@ export const Payment = () => {
   const [paymentData, setPaymentData] = useState({
     currency_quantity: 0,
     currency_type: "SR",
+    conversion_rate: 0,
+    currency_quantity_aed: 0,
     customer_id: 0,
     date: new Date(),
   });
-  const [conversionRate, setConversionRate] = useState({
-    sr: 0,
-    aed: 0,
-  });
+
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
@@ -49,7 +48,8 @@ export const Payment = () => {
     paymentData.currency_type !== "AED"
       ? (newPaymentData = {
           ...paymentData,
-          currency_quantity: paymentData.currency_quantity / conversionRate.aed,
+          currency_quantity_aed:
+            paymentData.currency_quantity / paymentData.conversion_rate,
         })
       : (newPaymentData = {
           ...paymentData,
@@ -63,11 +63,17 @@ export const Payment = () => {
     const customerDetails = await getCustomerByIdAPI(paymentData.customer_id);
     const ob = parseFloat(customerDetails.data.opening_balance);
     //updating opening balance
-    const updateOb = await updateCustomerObAPI(
-      parseFloat(ob - newPaymentData.currency_quantity),
-      paymentData.customer_id
-    );
-    console.log(updateOb);
+    if (paymentData.currency_type === "AED") {
+      const updateOb = await updateCustomerObAPI(
+        parseFloat(ob - newPaymentData.currency_quantity),
+        paymentData.customer_id
+      );
+    } else {
+      const updateOb = await updateCustomerObAPI(
+        parseFloat(ob - newPaymentData.currency_quantity_aed),
+        paymentData.customer_id
+      );
+    }
 
     if (response.status === 200) {
       setIsLoading(false);
@@ -145,7 +151,12 @@ export const Payment = () => {
               w="100%"
               size="lg"
               name="total"
-              onChange={(e) => setConversionRate({ aed: e.target.value })}
+              onChange={(e) =>
+                setPaymentData({
+                  ...paymentData,
+                  conversion_rate: e.target.value,
+                })
+              }
             />
           </FormControl>
         )}
@@ -157,7 +168,9 @@ export const Payment = () => {
               variant="filled"
               w="100%"
               size="lg"
-              value={paymentData.currency_quantity / conversionRate.aed}
+              value={
+                paymentData.currency_quantity / paymentData.conversion_rate
+              }
               readOnly
             />
           </FormControl>
