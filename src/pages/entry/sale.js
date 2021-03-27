@@ -22,7 +22,7 @@ export const Sale = () => {
   const [saleData, setSaleData] = useState({
     currency_quantity: 0,
     currency_charge: 0,
-    currency_type: "SR",
+    currency_type: "AED",
     customer_id: 0,
     from_customer: 0,
     date: new Date(),
@@ -103,8 +103,8 @@ export const Sale = () => {
               })
             }
           >
-            <option value="SR">SR</option>
             <option value="AED">AED</option>
+            <option value="SR">SR</option>
             <option value="INR">INR</option>
           </Select>
         </FormControl>
