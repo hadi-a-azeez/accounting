@@ -3,9 +3,10 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Flex,
   Button,
   useToast,
+  Switch,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import {
@@ -22,6 +23,8 @@ import { addExchangeAPI } from "../../api/exchange";
 export const CashReciept = () => {
   const [cashRecieptData, setCashRecieptData] = useState({
     currency_quantity: 0,
+    conversion_rate: 0,
+    currency_quantity_aed: 0,
     currency_type: "SR",
     customer_id: 0,
     date: new Date(),
@@ -35,6 +38,7 @@ export const CashReciept = () => {
     date: new Date(),
   });
 
+  const [isOnExchange, setIsOnExchange] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
@@ -55,21 +59,26 @@ export const CashReciept = () => {
       currency_total:
         exchangeData.currency_quantity / exchangeData.currency_charge,
     };
-    let newCashReceiptData = {};
-    cashRecieptData.currency_type !== "AED"
-      ? (newCashReceiptData = {
-          ...cashRecieptData,
-          currency_quantity:
-            cashRecieptData.currency_quantity / exchangeData.currency_charge,
-        })
-      : (newCashReceiptData = {
-          ...cashRecieptData,
-          currency_quantity: cashRecieptData.currency_quantity,
-        });
+    const newCashReceiptData = {
+      ...cashRecieptData,
+      currency_quantity_aed:
+        cashRecieptData.currency_quantity / cashRecieptData.conversion_rate,
+    };
+    // let newCashReceiptData = {};
+    // cashRecieptData.currency_type !== "AED"
+    //   ? (newCashReceiptData = {
+    //       ...cashRecieptData,
+    //       currency_quantity:
+    //         cashRecieptData.currency_quantity / exchangeData.currency_charge,
+    //     })
+    //   : (newCashReceiptData = {
+    //       ...cashRecieptData,
+    //       currency_quantity: cashRecieptData.currency_quantity,
+    //     });
 
     //adding cash receipt
     const responseCashReceipt = await addCashRecieptAPI(newCashReceiptData);
-    console.log(responseExchange);
+
     //getting details of customer for updating opening balance
     const customerDetails = await getCustomerByIdAPI(
       cashRecieptData.customer_id
@@ -77,25 +86,27 @@ export const CashReciept = () => {
     console.log(customerDetails);
     const ob = customerDetails.data.opening_balance;
     //updating opening balance
-    let newOb = parseFloat(ob) + newCashReceiptData.currency_quantity;
+    let newOb = parseFloat(ob) - newCashReceiptData.currency_quantity_aed;
     const updateOb = await updateCustomerObAPI(
       newOb,
       cashRecieptData.customer_id
     );
 
     //adding exchange
-    const responseExchange = await addExchangeAPI(newExchangeData);
-    //getting details of customer for updating opening balance
-    const customerDetailsTwo = await getCustomerByIdAPI(
-      exchangeData.customer_id
-    );
-    const obTwo = parseFloat(customerDetailsTwo.data.opening_balance);
-    //updating opening balance
-    const updateObTwo = await updateCustomerObAPI(
-      obTwo + exchangeData.currency_quantity / exchangeData.currency_charge,
-      exchangeData.customer_id
-    );
-    console.log(updateObTwo);
+    if (isOnExchange) {
+      const responseExchange = await addExchangeAPI(newExchangeData);
+      //getting details of customer for updating opening balance
+      const customerDetailsTwo = await getCustomerByIdAPI(
+        exchangeData.customer_id
+      );
+      const obTwo = parseFloat(customerDetailsTwo.data.opening_balance);
+      //updating opening balance
+      const updateObTwo = await updateCustomerObAPI(
+        obTwo + exchangeData.currency_quantity / exchangeData.currency_charge,
+        exchangeData.customer_id
+      );
+      console.log(updateObTwo);
+    }
 
     if (responseCashReceipt.status === 200) {
       setIsLoading(false);
@@ -111,8 +122,8 @@ export const CashReciept = () => {
 
   return (
     <>
-      <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
-        <FormControl w="25%">
+      <SimpleGrid columns={3} spacing={3} w="70%" justifyContent="center">
+        <FormControl w="100%">
           <FormLabel>Currency</FormLabel>
           <Select
             variant="filled"
@@ -133,7 +144,7 @@ export const CashReciept = () => {
             <option value="INR">INR</option>
           </Select>
         </FormControl>
-        <FormControl w="25%" ml="3">
+        <FormControl w="100%" ml="3">
           <FormLabel>Date</FormLabel>
           <DatePicker
             format="dd/MM/yyyy"
@@ -147,7 +158,7 @@ export const CashReciept = () => {
             }}
           />
         </FormControl>
-        <FormControl w="25%" ml="3">
+        <FormControl w="100%">
           <FormLabel>Customer</FormLabel>
           <AsyncSelect
             loadOptions={searchCustomers}
@@ -159,10 +170,8 @@ export const CashReciept = () => {
             }
           />
         </FormControl>
-      </Flex>
 
-      <Flex dir="row" w="90%" mt="3" d="flex" justifyContent="center">
-        <FormControl w="25%">
+        <FormControl w="100%">
           <FormLabel>Amount</FormLabel>
           <Input
             type="number"
@@ -182,10 +191,63 @@ export const CashReciept = () => {
             }}
           />
         </FormControl>
+        <FormControl w="100%">
+          <FormLabel>Conversion Rate(AED)</FormLabel>
+          <Input
+            type="number"
+            variant="filled"
+            w="100%"
+            size="lg"
+            name="quantity"
+            onChange={(e) => {
+              setCashRecieptData({
+                ...cashRecieptData,
+                conversion_rate: parseFloat(e.target.value),
+              });
+            }}
+          />
+        </FormControl>
+        <FormControl w="100%">
+          <FormLabel>Total(AED)</FormLabel>
+          <Input
+            type="number"
+            variant="filled"
+            w="100%"
+            size="lg"
+            name="quantity"
+            value={
+              cashRecieptData.currency_quantity /
+              cashRecieptData.conversion_rate
+            }
+          />
+        </FormControl>
         {cashRecieptData.currency_type === "SR" && (
+          <FormControl w="100%" ml="3">
+            <FormLabel>Exchange</FormLabel>
+            <Switch
+              mt="1"
+              size="lg"
+              isChecked={isOnExchange}
+              onChange={() => setIsOnExchange(!isOnExchange)}
+            ></Switch>
+          </FormControl>
+        )}
+        {cashRecieptData.currency_type === "SR" && isOnExchange && (
           <>
-            <FormControl w="25%" ml="3">
-              <FormLabel>Conversion rate</FormLabel>
+            <FormControl w="100%">
+              <FormLabel>Third party</FormLabel>
+              <AsyncSelect
+                loadOptions={searchCustomers}
+                onChange={(input) =>
+                  setExchangeData({
+                    ...exchangeData,
+                    customer_id: input.value,
+                  })
+                }
+              />
+            </FormControl>
+            <FormControl w="100%">
+              <FormLabel>Exchange rate</FormLabel>
               <Input
                 type="number"
                 variant="filled"
@@ -199,7 +261,7 @@ export const CashReciept = () => {
                 }
               />
             </FormControl>
-            <FormControl w="25%" ml="3">
+            <FormControl w="100%">
               <FormLabel>Total</FormLabel>
               <Input
                 variant="filled"
@@ -208,30 +270,14 @@ export const CashReciept = () => {
                 name="total"
                 value={
                   cashRecieptData.currency_quantity /
-                  exchangeData.currency_charge
+                    exchangeData.currency_charge || 0
                 }
                 readOnly
               />
             </FormControl>
           </>
         )}
-      </Flex>
-      {cashRecieptData.currency_type === "SR" && (
-        <Flex dir="row" w="70%" mt="3" d="flex" justifyContent="flex-start">
-          <FormControl w="25%">
-            <FormLabel>Third party</FormLabel>
-            <AsyncSelect
-              loadOptions={searchCustomers}
-              onChange={(input) =>
-                setExchangeData({
-                  ...exchangeData,
-                  customer_id: input.value,
-                })
-              }
-            />
-          </FormControl>
-        </Flex>
-      )}
+      </SimpleGrid>
       <Button
         colorScheme="blue"
         size="lg"

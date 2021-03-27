@@ -22,7 +22,8 @@ export const Purchase = () => {
   const [purchaseData, setPurchaseData] = useState({
     currency_quantity: 0,
     currency_charge: 0,
-    currency_type: "SR",
+    commission: 0,
+    currency_type: "AED",
     customer_id: 0,
     date: new Date(),
   });
@@ -47,9 +48,11 @@ export const Purchase = () => {
     setIsLoading(true);
     let newPurchase = {
       ...purchaseData,
-      currency_total:
-        (purchaseData.currency_charge * purchaseData.currency_quantity) /
-        conversionRate.aed,
+      currency_to_give:
+        purchaseData.currency_charge * purchaseData.currency_quantity,
+      currency_got:
+        purchaseData.currency_quantity * purchaseData.currency_charge -
+        purchaseData.currency_quantity * purchaseData.commission,
     };
     // purchaseData.currency_type !== "AED"
     //   ? (newPurchase = {
@@ -73,7 +76,7 @@ export const Purchase = () => {
     const ob = parseFloat(customerDetails.data.opening_balance);
     //updating opening balance
     const updateOb = await updateCustomerObAPI(
-      parseFloat(ob + newPurchase.currency_total),
+      parseFloat(ob + newPurchase.currency_to_give),
       purchaseData.customer_id
     );
     console.log(updateOb);
@@ -105,8 +108,8 @@ export const Purchase = () => {
               })
             }
           >
-            <option value="SR">SR</option>
             <option value="AED">AED</option>
+            <option value="SR">SR</option>
             <option value="INR">INR</option>
           </Select>
         </FormControl>
@@ -153,29 +156,34 @@ export const Purchase = () => {
             variant="filled"
             w="100%"
             size="lg"
-            name="charge"
+            name="currency_charge"
             onChange={(e) =>
               setPurchaseData({
                 ...purchaseData,
-                currency_charge: parseFloat(e.target.value),
+                [e.target.name]: parseFloat(e.target.value),
               })
             }
           />
         </FormControl>
 
         <FormControl w="100%" ml="3">
-          <FormLabel>Conversion rate (AED)</FormLabel>
+          <FormLabel>Commission</FormLabel>
           <Input
             variant="filled"
             w="100%"
             size="lg"
-            name="total"
-            onChange={(e) => setConversionRate({ aed: e.target.value })}
+            name="commission"
+            onChange={(e) =>
+              setPurchaseData({
+                ...purchaseData,
+                [e.target.name]: parseFloat(e.target.value),
+              })
+            }
           />
         </FormControl>
 
-        <FormControl w="100%" ml="3">
-          <FormLabel>Total</FormLabel>
+        <FormControl w="100%">
+          <FormLabel>Total To Give</FormLabel>
           <Input
             type="number"
             variant="filled"
@@ -188,15 +196,15 @@ export const Purchase = () => {
           />
         </FormControl>
         <FormControl w="100%" ml="3">
-          <FormLabel>Total (AED)</FormLabel>
+          <FormLabel>Total Got</FormLabel>
           <Input
             type="number"
             variant="filled"
             w="100%"
             size="lg"
             value={
-              (purchaseData.currency_quantity * purchaseData.currency_charge) /
-              conversionRate.aed
+              purchaseData.currency_quantity * purchaseData.currency_charge -
+              purchaseData.currency_quantity * purchaseData.commission
             }
             readOnly
           />
