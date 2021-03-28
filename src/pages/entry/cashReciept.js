@@ -58,6 +58,8 @@ export const CashReciept = () => {
       ...exchangeData,
       currency_total:
         exchangeData.currency_quantity / exchangeData.currency_charge,
+      currency_total_aed:
+        cashRecieptData.currency_quantity / cashRecieptData.conversion_rate,
     };
     const newCashReceiptData = {
       ...cashRecieptData,
@@ -100,12 +102,12 @@ export const CashReciept = () => {
         exchangeData.customer_id
       );
       const obTwo = parseFloat(customerDetailsTwo.data.opening_balance);
-      //updating opening balance
-      const updateObTwo = await updateCustomerObAPI(
-        obTwo + exchangeData.currency_quantity / exchangeData.currency_charge,
-        exchangeData.customer_id
-      );
-      console.log(updateObTwo);
+      // //updating opening balance
+      // const updateObTwo = await updateCustomerObAPI(
+      //   obTwo + exchangeData.currency_quantity / exchangeData.currency_charge,
+      //   exchangeData.customer_id
+      // );
+      // console.log(updateObTwo);
     }
 
     if (responseCashReceipt.status === 200) {

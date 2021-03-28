@@ -22,15 +22,13 @@ export const Sale = () => {
   const [saleData, setSaleData] = useState({
     currency_quantity: 0,
     currency_charge: 0,
+    convertion_rate: 0,
     currency_type: "AED",
     customer_id: 0,
     from_customer: 0,
     date: new Date(),
   });
-  const [conversionRate, setConversionRate] = useState({
-    sr: 0,
-    aed: 0,
-  });
+
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
@@ -48,22 +46,13 @@ export const Sale = () => {
 
     let newSale = {
       ...saleData,
-      currency_total:
+      convertion_rate: saleData.convertion_rate,
+      currency_total: saleData.currency_quantity * saleData.currency_charge,
+      currency_total_aed:
         (saleData.currency_charge * saleData.currency_quantity) /
-        conversionRate.aed,
+        saleData.convertion_rate,
     };
-    /* saleData.currency_type !== "AED"
-      ? (newSale = {
-          ...saleData,
-          currency_total:
-            (saleData.currency_charge * saleData.currency_quantity) /
-            conversionRate.aed,
-        })
-      : (newSale = {
-          ...saleData,
-          currency_total: saleData.currency_charge * saleData.currency_quantity,
-        }); */
-
+    console.log(newSale);
     //adding sale
     const response = await addSaleAPI(newSale);
     //getting details of customer for updating opening balance
@@ -177,7 +166,12 @@ export const Sale = () => {
             w="100%"
             size="lg"
             name="total"
-            onChange={(e) => setConversionRate({ aed: e.target.value })}
+            onChange={(e) =>
+              setSaleData({
+                ...saleData,
+                convertion_rate: parseFloat(e.target.value),
+              })
+            }
           />
         </FormControl>
 
@@ -202,7 +196,7 @@ export const Sale = () => {
             size="lg"
             value={
               (saleData.currency_quantity * saleData.currency_charge) /
-              conversionRate.aed
+              saleData.convertion_rate
             }
             readOnly
           />

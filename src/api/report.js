@@ -7,3 +7,10 @@ export const getUserReportAPI = async (customer_id) => {
     return await axios.get(`${apiRoot}/report/customer/${customer_id}`);
   } catch (error) {}
 };
+
+//get capital
+export const getCapital = async () => {
+  try {
+    return await axios.get(`${apiRoot}/report`);
+  } catch (error) {}
+};

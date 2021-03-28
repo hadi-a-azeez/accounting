@@ -19,7 +19,9 @@ import {
   Text,
   Flex,
   Spinner,
+  useStyles,
 } from "@chakra-ui/react";
+import { getCapital } from "../api/report";
 
 const Reports = () => {
   const [purchaseHistory, setPurchaseHistory] = useState([]);
@@ -28,6 +30,7 @@ const Reports = () => {
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [exchangeHistory, setExchaneHistory] = useState([]);
   const [sumOfOb, setSumOfOb] = useState({});
+  const [capital, setCapital] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [total, setTotal] = useState({
     sale: 0,
@@ -46,6 +49,7 @@ const Reports = () => {
       const paymentData = await getAllPaymentHistoryAPI();
       const exchangeData = await getAllExchangeHistoryAPI();
       const sumOfObData = await getSumOfObdAPI();
+      const capitalData = await getCapital();
 
       setPurchaseHistory(purchaseData.data.purchases);
       setSaleHistory(saleData.data.sales);
@@ -53,6 +57,7 @@ const Reports = () => {
       setPaymentHistory(paymentData.data.payments);
       setExchaneHistory(exchangeData.data.exchanges);
       setSumOfOb(sumOfObData.data);
+      setCapital(capitalData.data);
 
       setTotal({
         purchase: purchaseData.data.sum_of_purchases,
@@ -61,7 +66,7 @@ const Reports = () => {
         payment: paymentData.data.sum_of_payments,
         exchange: exchangeData.data.sum_of_exchanges,
       });
-      console.log(sumOfObData);
+      console.log(capitalData);
 
       setIsLoading(false);
     };
@@ -85,7 +90,7 @@ const Reports = () => {
           bg="white"
         >
           <Text fontWeight="700" fontSize="20px">
-            Capital: {sumOfOb.sum_of_ob}
+            Capital: {capital.balance}
           </Text>
         </Box>
       </Flex>
