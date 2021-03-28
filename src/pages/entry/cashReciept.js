@@ -86,11 +86,11 @@ export const CashReciept = () => {
     console.log(customerDetails);
     const ob = customerDetails.data.opening_balance;
     //updating opening balance
-    let newOb = parseFloat(ob) - newCashReceiptData.currency_quantity_aed;
-    const updateOb = await updateCustomerObAPI(
-      newOb,
-      cashRecieptData.customer_id
-    );
+    // let newOb = parseFloat(ob) - newCashReceiptData.currency_quantity_aed;
+    // const updateOb = await updateCustomerObAPI(
+    //   newOb,
+    //   cashRecieptData.customer_id
+    // );
 
     //adding exchange
     if (isOnExchange) {

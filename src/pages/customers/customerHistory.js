@@ -23,6 +23,7 @@ import { getSaleHistoryAPI, getFromSaleHistoryAPI } from "../../api/sale";
 import { getCashReceiptHistoryAPI } from "../../api/cashReciept";
 import { getPaymentHistoryAPI } from "../../api/payment";
 import { getExchangeHistoryAPI } from "../../api/exchange";
+import { getUserReportAPI } from "../../api/report";
 
 const CustomerHistory = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -33,15 +34,16 @@ const CustomerHistory = (props) => {
   const [cashReceiptHistory, setCashReceiptHistory] = useState([]);
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [exchangeHistory, setExchaneHistory] = useState([]);
-  const [total, setTotal] = useState({
-    sale: 0,
-    from_sale: 0,
-    purchase: 0,
-    cash_receipt: 0,
-    exchange: 0,
-    payment: 0,
-    exchange: 0,
-  });
+  // const [total, setTotal] = useState({
+  //   sale: 0,
+  //   from_sale: 0,
+  //   purchase: 0,
+  //   cash_receipt: 0,
+  //   exchange: 0,
+  //   payment: 0,
+  //   exchange: 0,
+  // });
+  const [customerTotal, setCustomerTotal] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const id = props.match.params.id;
 
@@ -55,7 +57,9 @@ const CustomerHistory = (props) => {
       const cashReceiptData = await getCashReceiptHistoryAPI(id);
       const paymentData = await getPaymentHistoryAPI(id);
       const exchangeData = await getExchangeHistoryAPI(id);
+      const customerReport = await getUserReportAPI(id);
 
+      setCustomerTotal(customerReport.data);
       setCustomerDetails(userData.data);
       setPurchaseHistory(purchaseData.data.purchases);
       setSaleHistory(saleData.data.sales);
@@ -64,15 +68,15 @@ const CustomerHistory = (props) => {
       setPaymentHistory(paymentData.data.payments);
       setExchaneHistory(exchangeData.data.exchanges);
 
-      setTotal({
-        purchase: purchaseData.data.sum_of_purchases,
-        sale: saleData.data.sum_of_sales,
-        from_sale: fromSaleData.data.sum_of_sales,
-        cash_receipt: cashReceiptData.data.sum_of_cash_receipts,
-        payment: paymentData.data.sum_of_payments,
-        exchange: exchangeData.data.sum_of_exchanges,
-      });
-      console.log(fromSaleHistory);
+      // setTotal({
+      //   purchase: purchaseData.data.sum_of_purchases,
+      //   sale: saleData.data.sum_of_sales,
+      //   from_sale: fromSaleData.data.sum_of_sales,
+      //   cash_receipt: cashReceiptData.data.sum_of_cash_receipts,
+      //   payment: paymentData.data.sum_of_payments,
+      //   exchange: exchangeData.data.sum_of_exchanges,
+      // });
+      // console.log(fromSaleHistory);
 
       setIsLoading(false);
     };
@@ -109,11 +113,7 @@ const CustomerHistory = (props) => {
             </>
           )}
           <Stack direction="row" mt="2">
-            <Button
-              colorScheme="blue"
-              size="sm"
-              onClick={() => console.log(total)}
-            >
+            <Button colorScheme="blue" size="sm">
               Update Customer
             </Button>
             {isModalVisible && <UpdateCustomer />}
@@ -135,23 +135,23 @@ const CustomerHistory = (props) => {
           bg="white"
           ml="3"
         >
-          <Text fontWeight="700" fontSize="17px">
-            Purchase: {total.purchase}
+          {/* <Text fontWeight="700" fontSize="17px">
+            Purchase: {customerTotal.purchase}
           </Text>
           <Text fontWeight="700" fontSize="17px">
-            Sale: {total.sale}
+            Sale: {customerTotal.sale}
+          </Text> */}
+          <Text fontWeight="700" fontSize="17px">
+            Payment: {customerTotal.payment}
           </Text>
           <Text fontWeight="700" fontSize="17px">
-            Payment: {total.payment}
+            Cash Receipt: {customerTotal.cash_receipt}
           </Text>
           <Text fontWeight="700" fontSize="17px">
-            Cash Receipt: {total.cash_receipt}
+            Exchange:
           </Text>
           <Text fontWeight="700" fontSize="17px">
-            Exchange: {total.exchange}
-          </Text>
-          <Text fontWeight="700" fontSize="17px">
-            Balance: {customerDetails.opening_balance}
+            Balance: {customerTotal.opening_balance}
           </Text>
         </Box>
       </Flex>
@@ -206,7 +206,7 @@ const CustomerHistory = (props) => {
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
-            Total Purchase: {total.purchase}
+            Total Purchase:
           </Text>
         </>
       )}
@@ -248,7 +248,7 @@ const CustomerHistory = (props) => {
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
-            Total Payment: {total.payment}
+            Total Payment:
           </Text>
         </>
       )}
@@ -294,7 +294,7 @@ const CustomerHistory = (props) => {
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
-            Total Sales: {total.sale}
+            Total Sales:
           </Text>
         </>
       )}
@@ -336,7 +336,7 @@ const CustomerHistory = (props) => {
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
-            Total Cash Receipt: {total.cash_receipt}
+            Total Cash Receipt:
           </Text>
         </>
       )}
@@ -380,7 +380,7 @@ const CustomerHistory = (props) => {
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
-            Total Exchange: {total.exchange}
+            Total Exchange:
           </Text>
         </>
       )}
@@ -426,7 +426,7 @@ const CustomerHistory = (props) => {
             </Table>
           </Box>
           <Text fontWeight="600" alignSelf="flex-start" ml="140px" mt="3">
-            Total Sales: {total.from_sale}
+            Total Sales:
           </Text>
         </>
       )}

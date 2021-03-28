@@ -75,11 +75,11 @@ export const Purchase = () => {
     const customerDetails = await getCustomerByIdAPI(purchaseData.customer_id);
     const ob = parseFloat(customerDetails.data.opening_balance);
     //updating opening balance
-    const updateOb = await updateCustomerObAPI(
-      parseFloat(ob + newPurchase.currency_to_give),
-      purchaseData.customer_id
-    );
-    console.log(updateOb);
+    // const updateOb = await updateCustomerObAPI(
+    //   parseFloat(ob + newPurchase.currency_to_give),
+    //   purchaseData.customer_id
+    // );
+    // console.log(updateOb);
 
     if (responsePurchase.status === 200) {
       setIsLoading(false);

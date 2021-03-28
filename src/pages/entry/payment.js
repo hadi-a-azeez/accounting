@@ -62,18 +62,18 @@ export const Payment = () => {
     //getting details of customer for updating opening balance
     const customerDetails = await getCustomerByIdAPI(paymentData.customer_id);
     const ob = parseFloat(customerDetails.data.opening_balance);
-    //updating opening balance
-    if (paymentData.currency_type === "AED") {
-      const updateOb = await updateCustomerObAPI(
-        parseFloat(ob - newPaymentData.currency_quantity),
-        paymentData.customer_id
-      );
-    } else {
-      const updateOb = await updateCustomerObAPI(
-        parseFloat(ob + newPaymentData.currency_quantity_aed),
-        paymentData.customer_id
-      );
-    }
+    // //updating opening balance
+    // if (paymentData.currency_type === "AED") {
+    //   const updateOb = await updateCustomerObAPI(
+    //     parseFloat(ob - newPaymentData.currency_quantity),
+    //     paymentData.customer_id
+    //   );
+    // } else {
+    //   const updateOb = await updateCustomerObAPI(
+    //     parseFloat(ob + newPaymentData.currency_quantity_aed),
+    //     paymentData.customer_id
+    //   );
+    // }
 
     if (response.status === 200) {
       setIsLoading(false);

@@ -69,12 +69,12 @@ export const Sale = () => {
     //getting details of customer for updating opening balance
     const customerDetails = await getCustomerByIdAPI(saleData.customer_id);
     const ob = parseFloat(customerDetails.data.opening_balance);
-    //updating opening balance
-    const updateOb = await updateCustomerObAPI(
-      parseFloat(ob - newSale.currency_total),
-      saleData.customer_id
-    );
-    console.log(updateOb);
+    // //updating opening balance
+    // const updateOb = await updateCustomerObAPI(
+    //   parseFloat(ob - newSale.currency_total),
+    //   saleData.customer_id
+    // );
+    // console.log(updateOb);
 
     if (response.status === 200) {
       setIsLoading(false);
