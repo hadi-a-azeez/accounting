@@ -33,7 +33,7 @@ const CustomerHistory = (props) => {
   const [fromSaleHistory, setFromSaleHistory] = useState([]);
   const [cashReceiptHistory, setCashReceiptHistory] = useState([]);
   const [paymentHistory, setPaymentHistory] = useState([]);
-  const [exchangeHistory, setExchaneHistory] = useState([]);
+  const [exchangeHistory, setExchangeHistory] = useState([]);
   // const [total, setTotal] = useState({
   //   sale: 0,
   //   from_sale: 0,
@@ -66,17 +66,7 @@ const CustomerHistory = (props) => {
       setFromSaleHistory(fromSaleData.data.sales);
       setCashReceiptHistory(cashReceiptData.data.cash_receipts);
       setPaymentHistory(paymentData.data.payments);
-      setExchaneHistory(exchangeData.data.exchanges);
-
-      // setTotal({
-      //   purchase: purchaseData.data.sum_of_purchases,
-      //   sale: saleData.data.sum_of_sales,
-      //   from_sale: fromSaleData.data.sum_of_sales,
-      //   cash_receipt: cashReceiptData.data.sum_of_cash_receipts,
-      //   payment: paymentData.data.sum_of_payments,
-      //   exchange: exchangeData.data.sum_of_exchanges,
-      // });
-      // console.log(fromSaleHistory);
+      setExchangeHistory(exchangeData.data.exchanges);
 
       setIsLoading(false);
     };
@@ -148,7 +138,7 @@ const CustomerHistory = (props) => {
             Cash Receipt: {customerTotal.cash_receipt}
           </Text>
           <Text fontWeight="700" fontSize="17px">
-            Exchange:
+            Exchange:{customerTotal.exchange}
           </Text>
           <Text fontWeight="700" fontSize="17px">
             Balance: {customerTotal.opening_balance}

@@ -66,17 +66,6 @@ export const CashReciept = () => {
       currency_quantity_aed:
         cashRecieptData.currency_quantity / cashRecieptData.conversion_rate,
     };
-    // let newCashReceiptData = {};
-    // cashRecieptData.currency_type !== "AED"
-    //   ? (newCashReceiptData = {
-    //       ...cashRecieptData,
-    //       currency_quantity:
-    //         cashRecieptData.currency_quantity / exchangeData.currency_charge,
-    //     })
-    //   : (newCashReceiptData = {
-    //       ...cashRecieptData,
-    //       currency_quantity: cashRecieptData.currency_quantity,
-    //     });
 
     //adding cash receipt
     const responseCashReceipt = await addCashRecieptAPI(newCashReceiptData);
@@ -87,12 +76,6 @@ export const CashReciept = () => {
     );
     console.log(customerDetails);
     const ob = customerDetails.data.opening_balance;
-    //updating opening balance
-    // let newOb = parseFloat(ob) - newCashReceiptData.currency_quantity_aed;
-    // const updateOb = await updateCustomerObAPI(
-    //   newOb,
-    //   cashRecieptData.customer_id
-    // );
 
     //adding exchange
     if (isOnExchange) {
@@ -102,12 +85,6 @@ export const CashReciept = () => {
         exchangeData.customer_id
       );
       const obTwo = parseFloat(customerDetailsTwo.data.opening_balance);
-      // //updating opening balance
-      // const updateObTwo = await updateCustomerObAPI(
-      //   obTwo + exchangeData.currency_quantity / exchangeData.currency_charge,
-      //   exchangeData.customer_id
-      // );
-      // console.log(updateObTwo);
     }
 
     if (responseCashReceipt.status === 200) {
