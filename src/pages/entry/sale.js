@@ -6,6 +6,8 @@ import {
   SimpleGrid,
   Button,
   useToast,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import {
@@ -17,20 +19,35 @@ import {
 import DatePicker from "react-date-picker";
 import AsyncSelect from "react-select/async";
 import { addSaleAPI } from "../../api/sale";
+import { useHistory } from "react-router-dom";
 
 export const Sale = () => {
+  const [isValidationError, setIsValidationError] = useState(false);
+
   const [saleData, setSaleData] = useState({
     currency_quantity: 0,
     currency_charge: 0,
     convertion_rate: 0,
     currency_type: "AED",
     customer_id: 0,
-    from_customer: 0,
     date: new Date(),
   });
 
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
+  const history = useHistory();
+
+  const validate = (callBack) => {
+    setIsValidationError(false);
+    if (
+      saleData.currency_quantity > 0 &&
+      saleData.currency_charge > 0 &&
+      saleData.convertion_rate > 0 &&
+      saleData.customer_id > 0
+    )
+      return callBack();
+    setIsValidationError(true);
+  };
 
   const searchCustomers = async (searchTerm, callBack) => {
     const customerResponse = await searchCustomersAPI(searchTerm);
@@ -58,12 +75,6 @@ export const Sale = () => {
     //getting details of customer for updating opening balance
     const customerDetails = await getCustomerByIdAPI(saleData.customer_id);
     const ob = parseFloat(customerDetails.data.opening_balance);
-    // //updating opening balance
-    // const updateOb = await updateCustomerObAPI(
-    //   parseFloat(ob - newSale.currency_total),
-    //   saleData.customer_id
-    // );
-    // console.log(updateOb);
 
     if (response.status === 200) {
       setIsLoading(false);
@@ -74,11 +85,18 @@ export const Sale = () => {
         duration: 2000,
         isClosable: true,
       });
+      history.go(0);
     }
   };
 
   return (
     <>
+      {isValidationError && (
+        <Alert status="error" mt="10px" mb="10px">
+          <AlertIcon />
+          Please Fill All Fields!
+        </Alert>
+      )}
       <SimpleGrid columns={3} spacing={3} w="70%" justifyContent="center">
         <FormControl w="100%">
           <FormLabel>Currency</FormLabel>
@@ -116,15 +134,6 @@ export const Sale = () => {
             }
           />
         </FormControl>
-        <FormControl w="100%">
-          <FormLabel>From</FormLabel>
-          <AsyncSelect
-            loadOptions={searchCustomers}
-            onChange={(input) =>
-              setSaleData({ ...saleData, from_customer: input.value })
-            }
-          />
-        </FormControl>
 
         <FormControl w="100%" ml="3">
           <FormLabel>Quantity</FormLabel>
@@ -143,7 +152,7 @@ export const Sale = () => {
           />
         </FormControl>
         <FormControl w="100%" ml="3">
-          <FormLabel>Charge</FormLabel>
+          <FormLabel>Rate</FormLabel>
           <Input
             type="number"
             variant="filled"
@@ -159,7 +168,7 @@ export const Sale = () => {
           />
         </FormControl>
 
-        <FormControl w="100%">
+        <FormControl w="100%" ml="3">
           <FormLabel>Conversion rate (AED)</FormLabel>
           <Input
             variant="filled"
@@ -206,7 +215,7 @@ export const Sale = () => {
         colorScheme="blue"
         size="lg"
         mt="4"
-        onClick={handleAddSale}
+        onClick={() => validate(handleAddSale)}
         isLoading={isLoading}
         loadingText="Adding sale"
       >

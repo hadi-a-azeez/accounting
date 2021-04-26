@@ -6,6 +6,8 @@ import {
   Button,
   SimpleGrid,
   useToast,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import {
@@ -17,8 +19,11 @@ import {
 import DatePicker from "react-date-picker";
 import AsyncSelect from "react-select/async";
 import { addPaymentAPI } from "../../api/payment";
+import { useHistory } from "react-router-dom";
 
 export const Payment = () => {
+  const history = useHistory();
+  const [isValidationError, setIsValidationError] = useState(false);
   const [paymentData, setPaymentData] = useState({
     currency_quantity: 0,
     currency_type: "SR",
@@ -30,6 +35,17 @@ export const Payment = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
+
+  const validate = (callBack) => {
+    setIsValidationError(false);
+    if (
+      paymentData.currency_quantity > 0 &&
+      paymentData.conversion_rate > 0 &&
+      paymentData.customer_id
+    )
+      return callBack();
+    setIsValidationError(true);
+  };
 
   const searchCustomers = async (searchTerm, callBack) => {
     const customerResponse = await searchCustomersAPI(searchTerm);
@@ -62,18 +78,6 @@ export const Payment = () => {
     //getting details of customer for updating opening balance
     const customerDetails = await getCustomerByIdAPI(paymentData.customer_id);
     const ob = parseFloat(customerDetails.data.opening_balance);
-    // //updating opening balance
-    // if (paymentData.currency_type === "AED") {
-    //   const updateOb = await updateCustomerObAPI(
-    //     parseFloat(ob - newPaymentData.currency_quantity),
-    //     paymentData.customer_id
-    //   );
-    // } else {
-    //   const updateOb = await updateCustomerObAPI(
-    //     parseFloat(ob + newPaymentData.currency_quantity_aed),
-    //     paymentData.customer_id
-    //   );
-    // }
 
     if (response.status === 200) {
       setIsLoading(false);
@@ -84,11 +88,18 @@ export const Payment = () => {
         duration: 9000,
         isClosable: true,
       });
+      history.go(0);
     }
   };
 
   return (
     <>
+      {isValidationError && (
+        <Alert status="error" mt="10px" mb="10px">
+          <AlertIcon />
+          Please Fill All Fields!
+        </Alert>
+      )}
       <SimpleGrid columns={3} spacing={3} w="70%" justifyContent="center">
         <FormControl w="100%">
           <FormLabel>Currency</FormLabel>
@@ -180,7 +191,7 @@ export const Payment = () => {
         colorScheme="blue"
         size="lg"
         mt="4"
-        onClick={handleAddPayment}
+        onClick={() => validate(handleAddPayment)}
         isLoading={isLoading}
         loadingText="Adding payment"
       >

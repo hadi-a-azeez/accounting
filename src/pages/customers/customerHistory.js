@@ -98,7 +98,7 @@ const CustomerHistory = (props) => {
                 Phone Number: {customerDetails.customer_phone}
               </Text>
               <Text fontWeight="600">
-                Charge: {customerDetails.customer_charge}
+                Rate: {customerDetails.customer_charge}
               </Text>
             </>
           )}
@@ -174,7 +174,7 @@ const CustomerHistory = (props) => {
                   <Th>Mode</Th>
                   <Th>Date</Th>
                   <Th>Quantity</Th>
-                  <Th>Charge</Th>
+                  <Th>Rate</Th>
                   <Th>Commission</Th>
                   <Th>Total To Give</Th>
                   <Th>Total Got</Th>
@@ -264,7 +264,7 @@ const CustomerHistory = (props) => {
                   <Th>From</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
-                  <Th>Charge</Th>
+                  <Th>Rate</Th>
                   <Th>Total</Th>
                 </Tr>
               </Thead>
@@ -351,7 +351,7 @@ const CustomerHistory = (props) => {
                   <Th>Date</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
-                  <Th>Charge</Th>
+                  <Th>Rate</Th>
                   <Th>Total</Th>
                 </Tr>
               </Thead>
@@ -396,7 +396,7 @@ const CustomerHistory = (props) => {
                   <Th>Customer</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
-                  <Th>Charge</Th>
+                  <Th>Rate</Th>
                   <Th>Total</Th>
                 </Tr>
               </Thead>

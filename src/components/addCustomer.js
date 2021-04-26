@@ -43,7 +43,7 @@ const AddCustomer = () => {
               />
             </FormControl>
             <FormControl>
-              <FormLabel>Charge</FormLabel>
+              <FormLabel>Rate</FormLabel>
               <Input size="lg" variant="filled" w="100%" placeholder="charge" />
             </FormControl>
           </ModalBody>

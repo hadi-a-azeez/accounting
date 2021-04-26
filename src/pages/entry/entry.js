@@ -11,6 +11,7 @@ import {
   Input,
   Flex,
   Button,
+  Heading,
 } from "@chakra-ui/react";
 import { CashReciept } from "./cashReciept";
 import { Payment } from "./payment";
@@ -26,6 +27,8 @@ const Entry = () => {
       <SideBar />
       <TopBar label="Entry" />
       <Box
+        mt="70px"
+        mb="50px"
         d="flex"
         borderRadius="6px"
         justifyContent="center"
@@ -37,6 +40,14 @@ const Entry = () => {
         minH="500px"
         borderWidth="1px"
       >
+        <Heading
+          textTransform="capitalize"
+          alignSelf="start"
+          ml="20px"
+          mt="10px"
+        >
+          {mode}
+        </Heading>
         <Flex
           dir="row"
           w="90%"

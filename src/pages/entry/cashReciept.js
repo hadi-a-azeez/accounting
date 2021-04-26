@@ -7,6 +7,8 @@ import {
   useToast,
   Switch,
   SimpleGrid,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import {
@@ -19,8 +21,10 @@ import DatePicker from "react-date-picker";
 import AsyncSelect from "react-select/async";
 import { addCashRecieptAPI } from "../../api/cashReciept";
 import { addExchangeAPI } from "../../api/exchange";
+import { useHistory } from "react-router-dom";
 
 export const CashReciept = () => {
+  const [isValidationError, setIsValidationError] = useState(false);
   const [cashRecieptData, setCashRecieptData] = useState({
     currency_quantity: 0,
     conversion_rate: 0,
@@ -41,6 +45,23 @@ export const CashReciept = () => {
   const [isOnExchange, setIsOnExchange] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
+  const history = useHistory();
+
+  const validate = (callback) => {
+    setIsValidationError(false);
+    if (
+      cashRecieptData.currency_quantity > 0 &&
+      cashRecieptData.conversion_rate > 0 &&
+      cashRecieptData.customer_id > 0
+    ) {
+      if (isOnExchange) {
+        if (exchangeData.currency_charge > 0 && exchangeData.customer_id > 0) {
+          return callback();
+        }
+      } else return callback();
+    }
+    setIsValidationError(true);
+  };
 
   const searchCustomers = async (searchTerm, callBack) => {
     const customerResponse = await searchCustomersAPI(searchTerm);
@@ -53,7 +74,6 @@ export const CashReciept = () => {
   };
   const handleAddCashReciept = async () => {
     setIsLoading(true);
-
     const newExchangeData = {
       ...exchangeData,
       currency_total:
@@ -96,11 +116,19 @@ export const CashReciept = () => {
         duration: 4000,
         isClosable: true,
       });
+      history.go(0);
     }
   };
 
   return (
     <>
+      {isValidationError && (
+        <Alert status="error" mt="10px" mb="10px">
+          <AlertIcon />
+          Please Fill All Fields!
+        </Alert>
+      )}
+
       <SimpleGrid columns={3} spacing={3} w="70%" justifyContent="center">
         <FormControl w="100%">
           <FormLabel>Currency</FormLabel>
@@ -261,7 +289,7 @@ export const CashReciept = () => {
         colorScheme="blue"
         size="lg"
         mt="4"
-        onClick={handleAddCashReciept}
+        onClick={() => validate(handleAddCashReciept)}
         isLoading={isLoading}
         loadingText="Adding cash receipt"
       >

@@ -126,7 +126,7 @@ const Reports = () => {
                   <Th>Date</Th>
                   <Th>Customer</Th>
                   <Th>Quantity</Th>
-                  <Th>Charge</Th>
+                  <Th>Rate</Th>
                   <Th>Total</Th>
                 </Tr>
               </Thead>
@@ -215,7 +215,7 @@ const Reports = () => {
                   <Th>Customer</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
-                  <Th>Charge</Th>
+                  <Th>Rate</Th>
                   <Th>Total</Th>
                 </Tr>
               </Thead>
@@ -303,7 +303,7 @@ const Reports = () => {
                   <Th>Customer</Th>
                   <Th>Currency type</Th>
                   <Th>Amount</Th>
-                  <Th>Charge</Th>
+                  <Th>Rate</Th>
                   <Th>Total</Th>
                 </Tr>
               </Thead>

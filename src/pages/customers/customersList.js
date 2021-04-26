@@ -43,7 +43,7 @@ const Customers = () => {
     const getCustomers = async () => {
       setIsLoading(true);
       const response = await getCustomerAPI();
-      console.log(response.data);
+      console.log(response);
       setCustomersData(response.data);
       setIsLoading(false);
     };
@@ -56,6 +56,8 @@ const Customers = () => {
     console.log(response);
     if (response.status === 200) {
       setIsBtnLoading(false);
+      setIsOpen(false);
+      history.go(0);
     }
   };
 
@@ -137,7 +139,7 @@ const Customers = () => {
                 />
               </FormControl>
               <FormControl>
-                <FormLabel>Charge</FormLabel>
+                <FormLabel>Rate</FormLabel>
                 <Input
                   type="number"
                   name="customer_charge"
@@ -252,7 +254,7 @@ const Customers = () => {
               <Tr>
                 <Th>Name</Th>
                 <Th>Phone Number</Th>
-                <Th>Charge</Th>
+                <Th>Rate</Th>
                 <Th></Th>
               </Tr>
             </Thead>

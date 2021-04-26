@@ -6,6 +6,8 @@ import {
   SimpleGrid,
   Button,
   useToast,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import {
@@ -17,8 +19,11 @@ import {
 import DatePicker from "react-date-picker";
 import AsyncSelect from "react-select/async";
 import { addPurchaseAPI } from "../../api/purchase";
+import { useHistory } from "react-router-dom";
 
 export const Purchase = () => {
+  const [isValidationError, setIsValidationError] = useState(false);
+  const history = useHistory();
   const [purchaseData, setPurchaseData] = useState({
     currency_quantity: 0,
     currency_charge: 0,
@@ -44,6 +49,18 @@ export const Purchase = () => {
     callBack(filteredResponse);
   };
 
+  const validate = (callBack) => {
+    setIsValidationError(false);
+    if (
+      purchaseData.customer_id > 0 &&
+      purchaseData.currency_charge > 0 &&
+      purchaseData.currency_quantity > 0 &&
+      purchaseData.commission > 0
+    )
+      return callBack();
+    setIsValidationError(true);
+  };
+
   const handleAddPurchase = async () => {
     setIsLoading(true);
     let newPurchase = {
@@ -54,18 +71,6 @@ export const Purchase = () => {
         purchaseData.currency_quantity * purchaseData.currency_charge -
         purchaseData.currency_quantity * purchaseData.commission,
     };
-    // purchaseData.currency_type !== "AED"
-    //   ? (newPurchase = {
-    //       ...purchaseData,
-    //       currency_total:
-    //         (purchaseData.currency_charge * purchaseData.currency_quantity) /
-    //         conversionRate.aed,
-    //     })
-    //   : (newPurchase = {
-    //       ...purchaseData,
-    //       currency_total:
-    //         purchaseData.currency_charge * purchaseData.currency_quantity,
-    //     });
 
     //adding purchase
     const responsePurchase = await addPurchaseAPI(newPurchase);
@@ -74,12 +79,6 @@ export const Purchase = () => {
     //getting details of customer for updating opening balance
     const customerDetails = await getCustomerByIdAPI(purchaseData.customer_id);
     const ob = parseFloat(customerDetails.data.opening_balance);
-    //updating opening balance
-    // const updateOb = await updateCustomerObAPI(
-    //   parseFloat(ob + newPurchase.currency_to_give),
-    //   purchaseData.customer_id
-    // );
-    // console.log(updateOb);
 
     if (responsePurchase.status === 200) {
       setIsLoading(false);
@@ -90,11 +89,18 @@ export const Purchase = () => {
         duration: 2000,
         isClosable: true,
       });
+      history.go(0);
     }
   };
 
   return (
     <>
+      {isValidationError && (
+        <Alert status="error" mt="10px" mb="10px">
+          <AlertIcon />
+          Please Fill All Fields!
+        </Alert>
+      )}
       <SimpleGrid columns={3} spacing={3} w="70%" justifyContent="center">
         <FormControl w="100%">
           <FormLabel>Currency</FormLabel>
@@ -150,7 +156,7 @@ export const Purchase = () => {
           />
         </FormControl>
         <FormControl w="100%" ml="3">
-          <FormLabel>Charge</FormLabel>
+          <FormLabel>Rate</FormLabel>
           <Input
             type="number"
             variant="filled"
@@ -214,7 +220,7 @@ export const Purchase = () => {
         colorScheme="blue"
         size="lg"
         mt="4"
-        onClick={handleAddPurchase}
+        onClick={() => validate(handleAddPurchase)}
         isLoading={isLoading}
         loadingText="Adding purchase"
       >
