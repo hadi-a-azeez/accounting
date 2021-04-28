@@ -59,6 +59,8 @@ const CustomerHistory = (props) => {
       const exchangeData = await getExchangeHistoryAPI(id);
       const customerReport = await getUserReportAPI(id);
 
+      console.log(userData.data);
+
       setCustomerTotal(customerReport.data);
       setCustomerDetails(userData.data);
       setPurchaseHistory(purchaseData.data.purchases);
@@ -273,7 +275,6 @@ const CustomerHistory = (props) => {
                   <Tr key={sale.id}>
                     <Td>Sale</Td>
                     <Td>{sale.date}</Td>
-                    <Td>{sale.from_customer_customer.customer_name}</Td>
                     <Td>{sale.currency_type}</Td>
                     <Td>{sale.currency_quantity}</Td>
                     <Td>{sale.currency_charge}</Td>
